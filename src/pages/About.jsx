@@ -13,7 +13,7 @@ export default function About() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="text-4xl font-extrabold text-[#3be1ac] mb-6"
+        className="text-4xl sm:mt-0 mt-14 font-extrabold text-[#3be1ac] mb-6"
       >
         About Me
       </motion.h1>
