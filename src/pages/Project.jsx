@@ -25,7 +25,7 @@ export default function Projects() {
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-yellow-500 mt-2 block"
+                className="text-[#3be1ac] mt-2 block"
               >
                 View Project
               </a>

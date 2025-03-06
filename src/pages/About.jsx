@@ -61,11 +61,11 @@ export default function About() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.5 }}
-        className="mt-8"
+        className="my-8"
       >
         <a
           href="/projects"
-          className="px-6 py-3 rounded-full text-lg font-semibold bg-[#3be1ac] text-black 
+          className="px-6 py-3 rounded- xl text-lg font-semibold bg-[#3be1ac] text-black 
                      hover:bg-[#2dc99d] transition duration-300 ease-in-out shadow-lg"
         >
           Explore My Work

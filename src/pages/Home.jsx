@@ -31,7 +31,7 @@ export default function Home() {
         <img
           src={me}
           alt="profile"
-          className="w-[150px] sm:w-[180px] md:w-[220px] lg:w-[250px] xl:w-[300px] rounded-[1.5rem] border border-white cursor-pointer transition-transform duration-300 hover:scale-110"
+          className="w-[180px] sm:w-[180px] md:w-[220px] lg:w-[250px] xl:w-[300px] rounded-[1.5rem] border border-white cursor-pointer transition-transform duration-300 hover:scale-110"
           onClick={() => setIsFullScreen(true)}
         />
       </div>
@@ -54,7 +54,7 @@ export default function Home() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
               transition={{ duration: 0.3 }}
-              className="max-w-[90%] max-h-[90%] rounded-lg shadow-lg cursor-pointer"
+              className="max-w-[100%] max-h-[100%] rounded-lg shadow-lg cursor-pointer"
             />
           </motion.div>
         )}
@@ -68,7 +68,7 @@ export default function Home() {
 
         {/* Typewriter Effect Below "Hi there! I'm" */}
         <div className="flex justify-center">
-          <div className="text-[#3be1ac] font-extrabold text-2xl sm:text-3xl md:text-4xl relative inline-block w-full max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] h-[40px] md:h-[48px] mt-2 text-center">
+          <div className="text-[#3be1ac] font-extrabold text-2xl sm:text-3xl md:text-4xl relative inline-block w-full min-w-[300px] md:min-w-[500px] lg:min-w-[600px] h-[40px] md:h-[48px] mt-2 text-center">
             <AnimatePresence mode="wait">
               <motion.span
                 key={texts[index]}
@@ -76,7 +76,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6 }}
-                className="absolute left-0 right-0 w-full"
+                className="absolute left-0 right-0"
               >
                 {texts[index]}
               </motion.span>
