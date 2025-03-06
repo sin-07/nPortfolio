@@ -4,7 +4,11 @@ import me from "../assets/me.jpg";
 
 export default function Home() {
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const texts = ["ANIKET SINGH", "A FULL STACK DEVELOPER", "A COMPUTER SCIENCE ENGINEER"];
+  const texts = [
+    "ANIKET SINGH",
+    "A FULL STACK DEVELOPER",
+    "A COMPUTER SCIENCE ENGINEER",
+  ];
   const [index, setIndex] = useState(0);
 
   // Cycle through text every 2.5 seconds
@@ -23,11 +27,11 @@ export default function Home() {
       className="min-h-screen flex flex-col items-center justify-center bg-black px-6"
     >
       {/* Image Container */}
-      <div className="mt-[6rem] flex justify-center">
+      <div className="mt-16 flex justify-center">
         <img
           src={me}
           alt="profile"
-          className="w-[200px] md:w-[250px] lg:w-[300px] rounded-[1.5rem] border border-white cursor-pointer transition-transform duration-300 hover:scale-110"
+          className="w-[150px] sm:w-[180px] md:w-[220px] lg:w-[250px] xl:w-[300px] rounded-[1.5rem] border border-white cursor-pointer transition-transform duration-300 hover:scale-110"
           onClick={() => setIsFullScreen(true)}
         />
       </div>
@@ -56,24 +60,30 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Smooth Typewriter Text */}
-      <h3 className="font-extrabold text-4xl text-white my-[2rem] text-center">
-        Hi there! I'm{" "}
-        <span className="text-[#3be1ac]">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={texts[index]}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.6 }}
-              className="inline-block"
-            >
-              {texts[index]}
-            </motion.span>
-          </AnimatePresence>
-        </span>
-      </h3>
+      {/* Text Section */}
+      <div className="text-center mt-8">
+        <h3 className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-white">
+          Hi there! I'm
+        </h3>
+
+        {/* Typewriter Effect Below "Hi there! I'm" */}
+        <div className="flex justify-center">
+          <div className="text-[#3be1ac] font-extrabold text-2xl sm:text-3xl md:text-4xl relative inline-block w-full max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] h-[40px] md:h-[48px] mt-2 text-center">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={texts[index]}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.6 }}
+                className="absolute left-0 right-0 w-full"
+              >
+                {texts[index]}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }
