@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 
-
 export default function Projects() {
     const projects = [
       { name: "Personal Portfolio", description: "ReactJS-based project for personal data management.", link: "https://github.com/sin-07/myPortfolio" },

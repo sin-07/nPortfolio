@@ -41,7 +41,7 @@ export default function Contact() {
             key={index}
             whileHover={{ scale: 1.1 }}
             transition={{ type: "spring", stiffness: 300 }}
-            className="bg-[#1a1a1a] border border-gray-600 rounded-lg px-6 py-3 text-white shadow-md cursor-pointer 
+            className="bg-[#1a1a1a] border border-gray-600 rounded-lg px-6 py-3 text-white shadow-md cursor-pointer \
                       hover:bg-[#3be1ac] hover:text-black transition-all duration-500 ease-in-out"
           >
             <a href={item.link} className="flex items-center gap-2">

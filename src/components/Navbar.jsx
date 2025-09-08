@@ -1,26 +1,35 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+
+// Helper for smooth scroll
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth" });
+  }
+};
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
-
-  // Function to determine active link
-  const isActive = (path) => location.pathname === path ? "text-[#3be1ac]" : "text-white";
 
   const sidebarVariants = {
     hidden: { x: "-100%", opacity: 0 },
     visible: { x: "0%", opacity: 1, transition: { duration: 0.4, ease: "easeInOut" } },
   };
 
+  const navLinks = [
+    { label: "Home", id: "home" },
+    { label: "About", id: "about" },
+    { label: "Projects", id: "projects" },
+    { label: "Contact", id: "contact" },
+  ];
+
   return (
     <nav className="fixed top-0 left-0 w-full bg-black shadow-md p-4 z-[1000] h-16">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-white text-2xl font-bold">Aniket</Link>
+        <a href="#home" onClick={e => { e.preventDefault(); scrollToSection("home"); }} className="text-white text-2xl font-bold">Aniket</a>
 
         {/* Desktop Navigation */}
         <motion.div
@@ -29,10 +38,16 @@ export default function Navbar() {
           transition={{ duration: 0.4 }}
           className="hidden md:flex space-x-6"
         >
-          <Link to="/" className={`hover:text-[#3be1ac] transition ${isActive("/")}`}>Home</Link>
-          <Link to="/about" className={`hover:text-[#3be1ac] transition ${isActive("/about")}`}>About</Link>
-          <Link to="/projects" className={`hover:text-[#3be1ac] transition ${isActive("/projects")}`}>Projects</Link>
-          <Link to="/contact" className={`hover:text-[#3be1ac] transition ${isActive("/contact")}`}>Contact</Link>
+          {navLinks.map(link => (
+            <a
+              key={link.id}
+              href={`#${link.id}`}
+              onClick={e => { e.preventDefault(); scrollToSection(link.id); }}
+              className="hover:text-[#3be1ac] transition text-white"
+            >
+              {link.label}
+            </a>
+          ))}
         </motion.div>
 
         {/* Mobile Menu Button */}
@@ -53,26 +68,39 @@ export default function Navbar() {
                 className="fixed inset-0 bg-black bg-opacity-90 z-[999]"
                 onClick={() => setIsOpen(false)}
               ></motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 bg-black bg-opacity-70 z-[999]"
+                onClick={() => setIsOpen(false)}
+              />
 
               {/* Sidebar */}
-              <motion.div
+              <motion.aside
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
                 variants={sidebarVariants}
-                className="fixed top-0 left-0 h-full w-64 bg-black text-white shadow-lg p-5 flex flex-col space-y-6 z-[1000]"
+                className="fixed top-0 left-0 h-full w-64 bg-[#181818] shadow-lg z-[1000] flex flex-col p-8"
               >
-                {/* Close Button */}
-                <button className="self-end" onClick={() => setIsOpen(false)}>
+                <button className="self-end mb-8 text-white" onClick={() => setIsOpen(false)}>
                   <X size={28} />
                 </button>
-
-                {/* Sidebar Links */}
-                <Link to="/" className={`text-lg hover:text-[#3be1ac] ${isActive("/")}`} onClick={() => setIsOpen(false)}>Home</Link>
-                <Link to="/about" className={`text-lg hover:text-[#3be1ac] ${isActive("/about")}`} onClick={() => setIsOpen(false)}>About</Link>
-                <Link to="/projects" className={`text-lg hover:text-[#3be1ac] ${isActive("/projects")}`} onClick={() => setIsOpen(false)}>Projects</Link>
-                <Link to="/contact" className={`text-lg hover:text-[#3be1ac] ${isActive("/contact")}`} onClick={() => setIsOpen(false)}>Contact</Link>
-              </motion.div>
+                <nav className="flex flex-col gap-6 mt-8">
+                  {navLinks.map(link => (
+                    <a
+                      key={link.id}
+                      href={`#${link.id}`}
+                      onClick={e => { e.preventDefault(); scrollToSection(link.id); setIsOpen(false); }}
+                      className="hover:text-[#3be1ac] transition text-white"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </nav>
+              </motion.aside>
             </>
           )}
         </AnimatePresence>
