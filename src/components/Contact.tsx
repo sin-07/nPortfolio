@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, ExternalLink, Sparkles, Send, Star } from "lucide-react";
+import { Github, Linkedin, Mail, ExternalLink, Sparkles, Send, Star, Globe } from "lucide-react";
 
 export default function Contact() {
   const socialLinks = [
@@ -32,12 +32,36 @@ export default function Contact() {
     },
   ];
 
+  const projects = [
+    {
+      name: "Raven Tutorials",
+      icon: Globe,
+      url: "https://raventutorials.in",
+      gradient: "from-purple-500 to-indigo-500",
+      iconBg: "bg-gradient-to-br from-purple-500 to-indigo-500",
+    },
+    {
+      name: "CricketWala PlayArena",
+      icon: Globe,
+      url: "https://cricketwalaplayarena.in",
+      gradient: "from-green-500 to-emerald-500",
+      iconBg: "bg-gradient-to-br from-green-500 to-emerald-500",
+    },
+    {
+      name: "Samastipur Blood Bank",
+      icon: Globe,
+      url: "https://samastipurbloodbank.com",
+      gradient: "from-red-500 to-rose-500",
+      iconBg: "bg-gradient-to-br from-red-500 to-rose-500",
+    },
+  ];
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.12,
       },
     },
   };
@@ -58,6 +82,30 @@ export default function Contact() {
     <div className="min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 relative overflow-hidden">
       {/* Elegant animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Animated floating particles */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute"
+            initial={{
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+            }}
+            animate={{
+              y: [null, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000)],
+              opacity: [0, 1, 0],
+              scale: [0, 1.5, 0],
+            }}
+            transition={{
+              duration: Math.random() * 3 + 3,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+          >
+            <Star className="w-4 h-4 text-cyan-400/30" />
+          </motion.div>
+        ))}
+
         <motion.div
           className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl"
           animate={{
@@ -86,7 +134,7 @@ export default function Contact() {
             ease: "easeInOut",
           }}
         />
-      </motion.div>
+      </div>
 
       {/* Elegant Heading */}
       <motion.div
@@ -96,21 +144,6 @@ export default function Contact() {
         transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
         className="mb-16 relative z-10"
       >
-        {/* Decorative stars */}
-        <motion.div
-          className="absolute -top-8 left-1/2 transform -translate-x-1/2"
-          animate={{
-            y: [-5, 5, -5],
-            rotate: [0, 360],
-          }}
-          transition={{
-            y: { duration: 2, repeat: Infinity },
-            rotate: { duration: 10, repeat: Infinity, ease: "linear" },
-          }}
-        >
-          <Sparkles className="w-8 h-8 text-cyan-400/50" />
-        </motion.div>
-
         <motion.div
           className="inline-flex items-center gap-4 mb-6 relative"
           whileHover={{ scale: 1.05 }}
@@ -127,7 +160,6 @@ export default function Contact() {
           
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent relative">
             Let's Connect
-            {/* Glow effect */}
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400 opacity-20 blur-2xl"
               animate={{
@@ -148,7 +180,6 @@ export default function Contact() {
           </motion.div>
         </motion.div>
 
-        {/* Animated underline */}
         <motion.div
           className="h-1.5 bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400 mx-auto rounded-full relative"
           initial={{ width: 0 }}
@@ -161,7 +192,16 @@ export default function Contact() {
             animate={{
               x: [-200, 200],
             }}
-            transition={{3, duration: 0.8 }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
+        </motion.div>
+      </motion.div>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.6, duration: 0.6 }}
         className="text-lg sm:text-xl text-slate-300 mb-16 max-w-3xl relative z-10 leading-relaxed px-4"
       >
         Have a project in mind or just want to chat?{" "}
@@ -178,61 +218,16 @@ export default function Contact() {
         >
           amazing together
         </motion.span>
-        
-        </motion.div     y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              y: [null, Math.random() * window.innerHeight],
-              opacity: [0, 1, 0],
-              scale: [0, 1.5, 0],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 3,
-              repeat: Infinity,
-              delay: i * 0.5,
-            }}
-          >
-            <Star className="w-4 h-4 text-cyan-400/30" />
-          </motion.div>
-        ))}
-      </div>
+        .
+      </motion.p>
 
-      {/* Heading */}
-      <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mb-12 relative z-10"
-      >
-        <motion.div
-          className="inline-flex items-center gap-3 mb-4"
-          whileHover={{ scale: 1.05 }}
-        >
-          <Sparkles className="w-10 h-10 text-cyan-400" />
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            Let's Connect
-          </h2>
-          <Sparkles className="w-10 h-10 text-emerald-400" />
-        </motion.div>
-        <motion.div
-          className="h-1 w-32 bg-gradient-to-r from-cyan-400 to-emerald-400 mx-auto rounded-full"
-          initial={{ width: 0 }}
-          whileInView={{ width: 128 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-        />
-      </motion.div>
-
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        whElegant Social Links Cards */}
+      {/* Social Links */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="flex flex-col gap-6 w-full max-w-2xl relative z-10"
+        className="flex flex-col gap-6 w-full max-w-2xl relative z-10 mb-12"
       >
         {socialLinks.map((item, index) => {
           const IconComponent = item.icon;
@@ -242,7 +237,6 @@ export default function Contact() {
               variants={itemVariants}
               className="relative group"
             >
-              {/* Glow effect on hover */}
               <motion.div
                 className={`absolute -inset-1 bg-gradient-to-r ${item.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-60 transition-all duration-500`}
                 initial={false}
@@ -256,36 +250,19 @@ export default function Contact() {
                 whileTap={{ scale: 0.98 }}
                 className="relative block bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl border-2 border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden group-hover:border-slate-600/80 transition-all duration-500"
               >
-                {/* Animated gradient background */}
                 <motion.div
                   className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                   initial={false}
                 />
 
-                {/* Shimmer effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full"
-                  animate={{
-                    translateX: ["100%", "100%", "-100%"],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatDelay: 2,
-                  }}
-                />
-
-                {/* Top accent line */}
                 <div className={`h-1.5 bg-gradient-to-r ${item.gradient}`} />
 
                 <div className="flex items-center gap-6 p-6 sm:p-8 relative">
-                  {/* Icon container with elegant design */}
                   <motion.div
                     className="relative"
                     whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    {/* Icon glow */}
                     <motion.div
                       className={`absolute inset-0 ${item.iconBg} rounded-2xl blur-xl opacity-50`}
                       animate={{
@@ -300,7 +277,6 @@ export default function Contact() {
                     </div>
                   </motion.div>
 
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <motion.h3
                       className="font-bold text-xl sm:text-2xl text-white mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-300 group-hover:to-emerald-300 group-hover:bg-clip-text transition-all duration-300"
@@ -313,7 +289,6 @@ export default function Contact() {
                     </p>
                   </div>
 
-                  {/* Arrow with send icon animation */}
                   <motion.div
                     className="flex items-center gap-2"
                     initial={{ opacity: 0, x: -10 }}
@@ -323,31 +298,76 @@ export default function Contact() {
                     <Send className="w-6 h-6 text-cyan-400" />
                   </motion.div>
                 </div>
-
-                {/* Corner decorations */}
-                <motion.div
-                  className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.gradient} opacity-5 rounded-bl-full`}
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.05, 0.15, 0.05],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                />
               </motion.a>
-            </motion.divw icon */}
-              <ExternalLink className="w-5 h-5 text-slate-600 group-hover:text-cyan-400 opacity-0 group-hover:opacity-100 transition-all duration-300 relative z-10" />
-
-              {/* Animated border on hover */}
-              <motion.div
-                className="absolute inset-0 rounded-2xl"
-                initial={false}
-                whileHover={{
-                  boxShadow: `0 0 30px ${index === 0 ? "rgba(239, 68, 68, 0.3)" : index === 1 ? "rgba(100, 116, 139, 0.3)" : "rgba(6, 182, 212, 0.3)"}`,
-                }}
-              />
-            </motion.a>
+            </motion.div>
           );
         })}
+      </motion.div>
+
+      {/* Live Projects Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.4 }}
+        className="w-full max-w-2xl mb-12 relative z-10"
+      >
+        <motion.h3
+          className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-8"
+          whileHover={{ scale: 1.05 }}
+        >
+          🚀 Live Projects
+        </motion.h3>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid sm:grid-cols-3 gap-4"
+        >
+          {projects.map((project, index) => {
+            const IconComponent = project.icon;
+            return (
+              <motion.a
+                key={index}
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative group bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-lg border-2 border-slate-700/50 rounded-2xl p-6 shadow-xl hover:border-slate-600 transition-all duration-300 overflow-hidden"
+              >
+                <motion.div
+                  className={`absolute -inset-1 bg-gradient-to-r ${project.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-40 transition-opacity duration-500`}
+                  initial={false}
+                />
+
+                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${project.gradient}`} />
+
+                <div className="relative z-10">
+                  <motion.div
+                    className={`${project.iconBg} w-12 h-12 rounded-xl flex items-center justify-center mb-3 shadow-lg`}
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <IconComponent className="w-6 h-6 text-white" />
+                  </motion.div>
+
+                  <h4 className="font-bold text-white text-sm mb-2 group-hover:text-cyan-300 transition-colors">
+                    {project.name}
+                  </h4>
+
+                  <div className="flex items-center gap-2 text-slate-500 text-xs">
+                    <ExternalLink className="w-3 h-3" />
+                    <span className="group-hover:text-cyan-400 transition-colors">Visit Site</span>
+                  </div>
+                </div>
+              </motion.a>
+            );
+          })}
+        </motion.div>
       </motion.div>
 
       {/* Bottom Card */}
@@ -355,10 +375,9 @@ export default function Contact() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.6, duration: 0.6 }}
-        className="mt-12 p-8 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg rounded-3xl border border-slate-700/50 w-full max-w-md relative overflow-hidden group"
+        transition={{ delay: 0.8 }}
+        className="mt-4 p-8 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg rounded-3xl border border-slate-700/50 w-full max-w-2xl relative overflow-hidden group"
       >
-        {/* Animated gradient background */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-emerald-500/10 to-cyan-500/10"
           animate={{
