@@ -78,21 +78,24 @@ export default function Home() {
         </div>
 
         {/* Animated Text */}
-        <div className="flex justify-center">
-          <div className="relative h-[50px] md:h-[60px] min-w-[300px] md:min-w-[500px]">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={texts[index]}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0 flex items-center justify-center font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-cyan-300 via-emerald-300 to-cyan-300 bg-clip-text text-transparent"
-              >
-                {texts[index]}
-              </motion.span>
-            </AnimatePresence>
-          </div>
+        <div className="flex justify-center w-full px-4">
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={texts[index]}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="font-extrabold text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-cyan-300 via-emerald-300 to-cyan-300 bg-clip-text text-transparent text-center"
+              style={{ 
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 0 30px rgba(34, 211, 238, 0.3)',
+                lineHeight: '1.2'
+              }}
+            >
+              {texts[index]}
+            </motion.h1>
+          </AnimatePresence>
         </div>
 
         <motion.p
