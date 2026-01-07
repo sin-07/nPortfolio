@@ -28,7 +28,7 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-20">
+    <div className="min-h-screen flex flex-col items-center justify-center py-20">
       {/* Heading */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -46,66 +46,61 @@ export default function About() {
         <div className="h-1 w-32 bg-gradient-to-r from-cyan-400 to-emerald-400 mx-auto rounded-full" />
       </motion.div>
 
-      {/* Content Card */}
+      {/* Single Full Width Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="max-w-4xl w-full bg-slate-900/80 backdrop-blur-sm p-8 sm:p-10 rounded-2xl border border-slate-700/50"
+        className="w-full bg-slate-900/80 backdrop-blur-sm p-8 sm:p-12 md:p-16 border-y border-slate-700/50"
       >
-        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent mb-4">
+        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent mb-6 text-center">
           Full Stack Developer & Computer Science Engineer
         </p>
 
-        <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-4">
+        <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-4 max-w-5xl mx-auto text-center">
           A dedicated creator passionate about turning ideas into reality. Whether it's
           crafting compelling narratives, designing captivating visuals, or solving complex problems, I
           thrive on challenges.
         </p>
 
-        <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-6">
+        <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-5xl mx-auto text-center">
           Currently pursuing Computer Science{" "}
           <span className="text-cyan-400 font-semibold">Engineering</span>,
           building a strong foundation in software development, algorithms, and system design.
         </p>
 
-        {/* Skills Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {skills.map((skill, index) => {
-            const IconComponent = skill.icon;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-slate-950/60 p-6 rounded-xl border border-slate-700/50 hover:border-cyan-400/30 transition-colors"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 rounded-xl bg-cyan-500/10">
-                    <IconComponent className="w-6 h-6 text-cyan-400" />
+        {/* Skills Section */}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {skills.map((skill, index) => {
+              const IconComponent = skill.icon;
+              return (
+                <div key={index} className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 rounded-xl bg-cyan-500/10">
+                      <IconComponent className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <h3 className="text-cyan-300 font-bold text-xl">{skill.title}</h3>
                   </div>
-                  <h3 className="text-cyan-300 font-bold text-lg">{skill.title}</h3>
+                  <ul className="space-y-3 text-slate-400 text-base sm:text-lg">
+                    {skill.items.map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-3">
+                        <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2 text-slate-400">
-                  {skill.items.map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        {/* Quote */}
-        <div className="mt-6 p-4 rounded-xl bg-cyan-500/5 border border-cyan-400/20 text-center">
-          <p className="text-slate-300 italic">
-            "Transforming complex problems into elegant solutions through code."
-          </p>
+          {/* Quote */}
+          <div className="p-6 rounded-xl bg-cyan-500/5 border border-cyan-400/20 text-center">
+            <p className="text-slate-300 italic text-lg">
+              "Transforming complex problems into elegant solutions through code."
+            </p>
+          </div>
         </div>
       </motion.div>
     </div>
