@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import me from "../assets/me.jpg";
-import { Sparkles, Code, Palette } from "lucide-react";
+import { Sparkles, Code, Palette, Zap, Cpu } from "lucide-react";
 
 export default function Home() {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -89,36 +88,111 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* Image Container with enhanced animation */}
+      {/* Professional Image Container */}
       <motion.div
         className="mt-16 flex justify-center relative"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, type: "spring" }}
       >
-        {/* Glowing ring animation */}
+        {/* Animated decorative circles */}
         <motion.div
-          className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 blur-2xl opacity-20"
+          className="absolute -inset-8 rounded-full border-2 border-cyan-400/20"
           animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.2, 0.4, 0.2],
+            rotate: 360,
+            scale: [1, 1.05, 1],
           }}
           transition={{
-            duration: 3,
+            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+            scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+        <motion.div
+          className="absolute -inset-12 rounded-full border-2 border-emerald-400/20"
+          animate={{
+            rotate: -360,
+            scale: [1, 1.08, 1],
+          }}
+          transition={{
+            rotate: { duration: 25, repeat: Infinity, ease: "linear" },
+            scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+        
+        {/* Corner decorative elements */}
+        <motion.div
+          className="absolute -top-4 -left-4 w-8 h-8"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        >
+          <Zap className="w-8 h-8 text-cyan-400" />
+        </motion.div>
+        <motion.div
+          className="absolute -bottom-4 -right-4 w-8 h-8"
+          animate={{ rotate: -360 }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        >
+          <Cpu className="w-8 h-8 text-emerald-400" />
+        </motion.div>
+        
+        {/* Glowing gradient background */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-500 blur-3xl opacity-20"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.4, 0.2],
+            rotate: [0, 180, 360],
+          }}
+          transition={{
+            duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
         
-        <motion.img
-          src={me}
-          alt="Aniket Singh - Full Stack Developer"
+        {/* Image with professional frame */}
+        <motion.div
+          className="relative"
           animate={floatingAnimation}
-          whileHover={{ scale: 1.05, rotate: 2 }}
-          transition={{ duration: 0.3 }}
-          className="w-[180px] sm:w-[200px] md:w-[250px] lg:w-[280px] xl:w-[320px] rounded-3xl border-4 border-cyan-400 cursor-pointer shadow-2xl shadow-cyan-500/50 hover:shadow-cyan-500/70 relative z-10"
-          onClick={() => setIsFullScreen(true)}
-        />
+        >
+          {/* Gradient border frame */}
+          <div className="absolute -inset-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 rounded-3xl opacity-75 blur-sm" />
+          
+          <motion.img
+            src="/AniketSingh.jpg"
+            alt="Aniket Singh - Full Stack Developer"
+            whileHover={{
+              scale: 1.15,
+              rotate: [0, 2, -2, 0],
+              transition: { duration: 0.5, ease: "easeOut" },
+            }}
+            whileTap={{ scale: 0.95 }}
+            className="w-[180px] sm:w-[200px] md:w-[250px] lg:w-[280px] xl:w-[320px] rounded-3xl border-4 border-white cursor-pointer shadow-2xl shadow-cyan-500/50 hover:shadow-cyan-500/90 hover:border-cyan-300 relative z-10 transition-all duration-500"
+            onClick={() => setIsFullScreen(true)}
+          />
+          
+          {/* Sparkle effects on corners */}
+          <motion.div
+            className="absolute -top-2 -right-2 text-yellow-300"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.5, 1, 0.5],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <Sparkles className="w-6 h-6" />
+          </motion.div>
+          <motion.div
+            className="absolute -bottom-2 -left-2 text-yellow-300"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.5, 1, 0.5],
+            }}
+            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+          >
+            <Sparkles className="w-6 h-6" />
+          </motion.div>
+        </motion.div>
       </motion.div>
 
       {/* Full-Screen Image View */}
@@ -132,15 +206,33 @@ export default function Home() {
             className="fixed inset-0 bg-black/95 flex items-center justify-center z-[1000] backdrop-blur-md"
             onClick={() => setIsFullScreen(false)}
           >
-            <motion.img
-              src={me}
-              alt="Full Screen Profile"
-              initial={{ scale: 0.8, rotate: -5 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0.8, rotate: 5 }}
-              transition={{ duration: 0.4, type: "spring" }}
-              className="max-w-[90%] max-h-[90%] rounded-2xl shadow-2xl cursor-pointer border-4 border-cyan-400"
-            />
+            <motion.div
+              className="relative"
+              initial={{ scale: 0.5, rotate: -10, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
+              exit={{ scale: 0.5, rotate: 10, opacity: 0 }}
+              transition={{ duration: 0.5, type: "spring", bounce: 0.3 }}
+            >
+              {/* Gradient glow effect */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-500 rounded-3xl blur-2xl opacity-50" />
+              
+              <motion.img
+                src="/AniketSingh.jpg"
+                alt="Full Screen Profile"
+                className="max-w-[90vw] max-h-[90vh] rounded-2xl shadow-2xl cursor-pointer border-4 border-gradient-to-r from-cyan-400 to-emerald-400 relative z-10"
+                whileHover={{ scale: 1.02 }}
+              />
+              
+              {/* Close hint */}
+              <motion.div
+                className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 text-white/70 text-sm"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                Click anywhere to close
+              </motion.div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

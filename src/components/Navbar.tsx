@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, User, Mail } from "lucide-react";
+import { Menu, X, Home, User, Mail, Code2 } from "lucide-react";
 
 const scrollToSection = (id: string) => {
   const el = document.getElementById(id);
@@ -24,6 +24,7 @@ export default function Navbar() {
   const navLinks = [
     { label: "Home", id: "home", icon: Home },
     { label: "About", id: "about", icon: User },
+    { label: "Projects", id: "projects", icon: Code2 },
     { label: "Contact", id: "contact", icon: Mail },
   ];
 
@@ -44,7 +45,7 @@ export default function Navbar() {
           }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-2xl font-bold relative"
+          className="text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-2xl font-bold relative group"
         >
           Aniket
           <motion.div
@@ -52,6 +53,11 @@ export default function Navbar() {
             initial={{ width: 0 }}
             whileHover={{ width: "100%" }}
             transition={{ duration: 0.3 }}
+          />
+          {/* Subtle glow on hover */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-emerald-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            initial={false}
           />
         </motion.a>
 
@@ -160,15 +166,20 @@ export default function Navbar() {
                         }}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 * (index + 1) }}
+                        transition={{ delay: 0.1 * (index + 1), type: "spring", stiffness: 120 }}
                         whileHover={{ x: 10, scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="group flex items-center gap-4 text-slate-300 hover:text-cyan-400 transition-all duration-300 p-4 rounded-xl hover:bg-slate-800/50 border border-transparent hover:border-cyan-400/30"
+                        whileTap={{ scale: 0.98 }}
+                        className="group flex items-center gap-4 text-slate-300 hover:text-cyan-400 transition-all duration-300 p-4 rounded-xl hover:bg-slate-800/50 border border-transparent hover:border-cyan-400/30 relative overflow-hidden"
                       >
-                        <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 group-hover:from-cyan-500/30 group-hover:to-emerald-500/30 transition-all">
+                        {/* Animated background on hover */}
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          initial={false}
+                        />
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 group-hover:from-cyan-500/30 group-hover:to-emerald-500/30 transition-all relative z-10">
                           <IconComponent className="w-5 h-5" />
                         </div>
-                        <span className="text-lg font-medium">{link.label}</span>
+                        <span className="text-lg font-medium relative z-10">{link.label}</span>
                       </motion.a>
                     );
                   })}

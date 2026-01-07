@@ -34,19 +34,21 @@ export default function About() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
         stiffness: 100,
+        damping: 12,
       },
     },
   };
@@ -153,16 +155,21 @@ export default function About() {
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  className="bg-slate-950/60 backdrop-blur-sm p-6 rounded-2xl border border-slate-700/50 hover:border-cyan-400/50 transition-all duration-300 group"
+                  whileHover={{ scale: 1.05, y: -8 }}
+                  className="bg-slate-950/60 backdrop-blur-sm p-6 rounded-2xl border border-slate-700/50 hover:border-cyan-400/70 hover:shadow-lg hover:shadow-cyan-400/20 transition-all duration-300 group relative overflow-hidden"
                 >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`p-3 rounded-xl bg-gradient-to-br ${skill.color} bg-opacity-10`}>
-                      <IconComponent className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  {/* Animated background on hover */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    initial={false}
+                  />
+                  <div className="flex items-center gap-3 mb-4 relative z-10">
+                    <div className={`p-3 rounded-xl bg-gradient-to-br ${skill.color} bg-opacity-10 group-hover:scale-110 transition-transform duration-300`}>
+                      <IconComponent className="w-6 h-6 text-cyan-400 group-hover:text-cyan-300" />
                     </div>
-                    <h3 className="text-cyan-300 font-bold text-lg">{skill.title}</h3>
+                    <h3 className="text-cyan-300 font-bold text-lg group-hover:text-cyan-200">{skill.title}</h3>
                   </div>
-                  <ul className="space-y-2 text-slate-400">
+                  <ul className="space-y-2 text-slate-400 relative z-10">
                     {skill.items.map((item, idx) => (
                       <motion.li
                         key={idx}

@@ -2,76 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  box-sizing: border-box;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-  color: #e2e8f0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+@layer components {
+  nav {
+    background: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(12px);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer utilities {
+  /* Custom scrollbar with gradient */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
 
-nav {
-  background: rgba(15, 23, 42, 0.8) !important;
-  backdrop-filter: blur(12px);
-}
+  ::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+  }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #22d3ee 0%, #10b981 100%);
+    border-radius: 10px;
+    border: 2px solid #0f172a;
+  }
 
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #06b6d4 0%, #059669 100%);
+  }
 
-/* Custom scrollbar with gradient */
-::-webkit-scrollbar {
-  width: 12px;
-}
+  /* Selection color with gradient */
+  ::selection {
+    background: linear-gradient(90deg, #22d3ee 0%, #10b981 100%);
+    color: #000000;
+  }
 
-::-webkit-scrollbar-track {
-  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
-}
+  ::-moz-selection {
+    background: linear-gradient(90deg, #22d3ee 0%, #10b981 100%);
+    color: #000000;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #22d3ee 0%, #10b981 100%);
-  border-radius: 10px;
-  border: 2px solid #0f172a;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #06b6d4 0%, #059669 100%);
-}
-
-/* Selection color with gradient */
-::selection {
-  background: linear-gradient(90deg, #22d3ee 0%, #10b981 100%);
-  color: #000000;
-}
-
-::-moz-selection {
-  background: linear-gradient(90deg, #22d3ee 0%, #10b981 100%);
-  color: #000000;
-}
-
-/* Smooth transitions for all elements */
-* {
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid #22d3ee;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
 }
 
 /* Professional animations */
@@ -95,6 +103,26 @@ button {
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.5;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.2);
+  }
+}
+
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out;
 }
@@ -105,8 +133,17 @@ button {
   background-size: 1000px 100%;
 }
 
-/* Focus styles for accessibility */
-*:focus-visible {
-  outline: 2px solid #22d3ee;
-  outline-offset: 2px;
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Smooth transitions for performance */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
 }
