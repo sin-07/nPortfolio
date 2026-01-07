@@ -82,22 +82,21 @@ export default function Contact() {
     <div className="min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 relative overflow-hidden">
       {/* Elegant animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Animated floating particles */}
-        {[...Array(8)].map((_, i) => (
+        {/* Optimized floating particles */}
+        {[...Array(5)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute"
-            initial={{
-              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+            className="absolute w-1 h-1 bg-cyan-400/20 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
             }}
             animate={{
-              y: [null, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000)],
-              opacity: [0, 1, 0],
-              scale: [0, 1.5, 0],
+              y: [-30, 30],
+              opacity: [0.2, 0.5, 0.2],
             }}
             transition={{
-              duration: Math.random() * 3 + 3,
+              duration: 6 + i,
               repeat: Infinity,
               delay: i * 0.5,
             }}

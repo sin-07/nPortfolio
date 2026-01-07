@@ -14,11 +14,10 @@ const App: React.FC = () => {
         <motion.div
           className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 via-transparent to-emerald-500/10"
           animate={{
-            opacity: [0.3, 0.6, 0.3],
-            scale: [1, 1.1, 1],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
-            duration: 8,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut",
           }}

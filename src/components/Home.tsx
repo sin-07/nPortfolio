@@ -19,9 +19,9 @@ export default function Home() {
   }, []);
 
   const floatingAnimation = {
-    y: [0, -20, 0],
+    y: [0, -15, 0],
     transition: {
-      duration: 3,
+      duration: 4,
       repeat: Infinity,
       ease: "easeInOut",
     },
@@ -43,24 +43,24 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
-      {/* Animated particles */}
+      {/* Optimized animated particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-cyan-400/30 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
             }}
             animate={{
-              y: [null, Math.random() * window.innerHeight],
-              opacity: [0, 1, 0],
+              y: [-20, 20],
+              opacity: [0.3, 0.6, 0.3],
             }}
             transition={{
-              duration: Math.random() * 5 + 5,
+              duration: 5 + i,
               repeat: Infinity,
-              ease: "linear",
+              ease: "easeInOut",
             }}
           />
         ))}

@@ -59,23 +59,24 @@ export default function About() {
       <motion.div
         className="absolute top-20 right-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
         animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{
-          duration: 8,
+          duration: 6,
           repeat: Infinity,
+          ease: "easeInOut",
         }}
       />
       <motion.div
         className="absolute bottom-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl"
         animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.3, 0.5, 0.3],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{
-          duration: 8,
+          duration: 6,
           repeat: Infinity,
+          ease: "easeInOut",
+          delay: 3,
         }}
       />
 
