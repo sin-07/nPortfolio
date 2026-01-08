@@ -14,15 +14,6 @@ const scrollToSection = (id: string) => {
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
-  const sidebarVariants = {
-    hidden: { x: "-100%", opacity: 0 },
-    visible: {
-      x: "0%",
-      opacity: 1,
-      transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
-    },
-  }
-
   const navLinks = [
     { label: "Home", id: "home", icon: Home },
     { label: "About", id: "about", icon: User },
@@ -124,10 +115,10 @@ export default function Navbar() {
 
               {/* Sidebar */}
               <motion.aside
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                variants={sidebarVariants}
+                initial={{ x: "-100%", opacity: 0 }}
+                animate={{ x: "0%", opacity: 1 }}
+                exit={{ x: "-100%", opacity: 0 }}
+                transition={{ duration: 0.4 }}
                 className="fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-slate-900 to-slate-950 shadow-2xl z-[999] flex flex-col p-8 border-r border-slate-700/50"
               >
                 {/* Close Button */}
