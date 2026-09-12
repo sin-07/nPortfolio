@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { X, Send, CheckCircle2 } from "lucide-react";
+import gsap from "gsap";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -16,6 +17,71 @@ export default function ContactModal({ isOpen, onClose, defaultService }: Contac
   const [budget, setBudget] = useState("$5k - $15k");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Freeze background body scrolling and run GSAP entrance animation
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Freeze background scroll
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    // GSAP Backdrop Fade In
+    if (backdropRef.current) {
+      gsap.fromTo(
+        backdropRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.28, ease: "power2.out" }
+      );
+    }
+
+    // GSAP Modal Pop & Spring In
+    if (modalRef.current) {
+      gsap.fromTo(
+        modalRef.current,
+        { scale: 0.88, y: 30, opacity: 0 },
+        { scale: 1, y: 0, opacity: 1, duration: 0.38, ease: "back.out(1.25)" }
+      );
+    }
+
+    // Escape key closes popup with animation
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleCloseWithAnimation();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow || "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const handleCloseWithAnimation = () => {
+    if (modalRef.current && backdropRef.current) {
+      gsap.to(modalRef.current, {
+        scale: 0.9,
+        y: 20,
+        opacity: 0,
+        duration: 0.22,
+        ease: "power2.in",
+      });
+      gsap.to(backdropRef.current, {
+        opacity: 0,
+        duration: 0.22,
+        ease: "power2.in",
+        onComplete: () => {
+          onClose();
+        },
+      });
+    } else {
+      onClose();
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -32,17 +98,28 @@ export default function ContactModal({ isOpen, onClose, defaultService }: Contac
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      onClose();
+      handleCloseWithAnimation();
     }, 2400);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs transition-opacity animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-[#FAF8F3] border-2.5 border-zinc-900 rounded-2xl p-6 sm:p-8 shadow-[6px_6px_0px_#1e1e1e]">
+    <div
+      ref={backdropRef}
+      onClick={(e) => {
+        if (e.target === backdropRef.current) {
+          handleCloseWithAnimation();
+        }
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    >
+      <div
+        ref={modalRef}
+        className="relative w-full max-w-lg bg-[#FAF8F3] border-2.5 border-zinc-900 rounded-2xl p-6 sm:p-8 shadow-[6px_6px_0px_#1e1e1e] will-change-transform max-h-[90vh] overflow-y-auto"
+      >
         {/* Close Button */}
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 rounded-lg border-2 border-zinc-900 bg-white text-zinc-900 hover:bg-zinc-100 shadow-[2px_2px_0px_#1e1e1e] transition-all cursor-pointer"
+          onClick={handleCloseWithAnimation}
+          className="absolute top-4 right-4 p-1.5 rounded-lg border-2 border-zinc-900 bg-white text-zinc-900 hover:bg-zinc-100 shadow-[2px_2px_0px_#1e1e1e] transition-all cursor-pointer z-10"
         >
           <X className="w-4 h-4" />
         </button>
