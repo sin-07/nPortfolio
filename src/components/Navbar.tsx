@@ -188,7 +188,7 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
               </span>
             </div>
             <span className="text-[10px] sm:text-xs text-zinc-600 font-medium tracking-wide">
-              Full Stack Dev &amp; CS Engineer • SOA University
+              Software Engineer @ TCS • Full Stack Developer
             </span>
           </div>
         </Link>
@@ -236,7 +236,7 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
           {/* Status badge */}
           <div className="hidden lg:flex items-center gap-1.5 bg-[#eae9df] border-1.5 border-zinc-900 rounded-full px-3 py-1 text-xs font-semibold text-zinc-800 shadow-[1px_1px_0px_#1e1e1e]">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>SOA University</span>
+            <span>Software Engineer @ TCS</span>
           </div>
 
           {/* Let's Build Button */}

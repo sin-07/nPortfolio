@@ -68,7 +68,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
 
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-[#def7ec] text-emerald-950 border-1.5 border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Full Stack Developer &amp; Computer Science Engineer</span>
+              <span>Software Engineer @ TCS • Full Stack Developer</span>
             </span>
           </div>
 
@@ -88,7 +88,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
             </p>
 
             <div className="bg-[#edeae1] border-l-3 border-zinc-900 pl-3.5 py-2 pr-3 rounded-r-xl text-xs sm:text-sm text-zinc-700 leading-relaxed shadow-[1px_1px_0px_#1e1e1e]">
-              Currently pursuing <strong className="text-zinc-950 font-bold">Computer Science Engineering</strong> at <strong className="text-zinc-950 font-bold">Siksha &apos;O&apos; Anusandhan University</strong>, building a strong foundation in <span className="font-mono font-semibold text-zinc-900">software development</span>, <span className="font-mono font-semibold text-zinc-900">algorithms</span>, and <span className="font-mono font-semibold text-zinc-900">system design</span>.
+              <strong className="text-zinc-950 font-bold">B.Tech CSE Graduate</strong>, currently working as a <strong className="text-zinc-950 font-bold">Software Engineer at Tata Consultancy Services (TCS)</strong>, specializing in scalable enterprise applications, modern full-stack architectures, and high-performance cloud solutions.
             </div>
           </div>
 
@@ -193,7 +193,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
 
             {/* Cozy neon corner pill */}
             <div className="absolute bottom-4 right-4 bg-zinc-900/90 text-emerald-400 border border-emerald-500/50 px-2.5 py-1 rounded-md text-[11px] font-mono shadow-[2px_2px_0px_#000]">
-              &lt;/&gt; ANIKET SINGH • SOA CSE
+              &lt;/&gt; ANIKET SINGH • TCS SOFTWARE ENGINEER
             </div>
           </div>
         </div>

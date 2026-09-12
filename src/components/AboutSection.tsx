@@ -98,7 +98,7 @@ export default function AboutSection() {
           Aniket Singh
         </h2>
         <p className="text-zinc-600 text-sm mt-1">
-          Full Stack Developer &amp; Computer Science Engineer • Siksha &apos;O&apos; Anusandhan University
+          Software Engineer at Tata Consultancy Services (TCS) • B.Tech CSE Graduate
         </p>
       </div>
 
@@ -114,12 +114,12 @@ export default function AboutSection() {
             <span className="w-3 h-3 rounded-full bg-amber-400 border border-zinc-900"></span>
             <span className="w-3 h-3 rounded-full bg-emerald-400 border border-zinc-900"></span>
             <span className="ml-2 font-mono text-xs font-bold text-zinc-800">
-              aniket@soa-cse: ~/profile/manifesto.ts
+              aniket@tcs: ~/profile/manifesto.ts
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-2">
             <span className="font-mono text-[10px] uppercase font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded">
-              Status: Building Real Products
+              Status: Software Engineer @ TCS
             </span>
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function AboutSection() {
             </div>
 
             <h3 className="font-pixel text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight leading-tight">
-              Full Stack Developer &amp; Computer Science Engineer
+              Software Engineer at TCS &amp; Full Stack Developer
             </h3>
           </div>
 
@@ -144,7 +144,7 @@ export default function AboutSection() {
             </p>
 
             <p className="text-sm sm:text-base text-zinc-700 leading-relaxed border-l-3 border-sky-400 pl-4 py-0.5">
-              Currently pursuing <span className="font-bold text-zinc-900">Computer Science Engineering</span>, building a strong foundation in <span className="font-mono font-semibold text-zinc-950 bg-[#e6f4ea] px-1.5 py-0.5 rounded border border-emerald-300">software development</span>, <span className="font-mono font-semibold text-zinc-950 bg-[#e8f0fe] px-1.5 py-0.5 rounded border border-blue-300">algorithms</span>, and <span className="font-mono font-semibold text-zinc-950 bg-[#fce8e6] px-1.5 py-0.5 rounded border border-rose-300">system design</span>.
+              <span className="font-bold text-zinc-900">B.Tech Graduate in Computer Science &amp; Engineering</span>, currently working as a <span className="font-bold text-zinc-900">Software Engineer at Tata Consultancy Services (TCS)</span>. Leveraging solid computer science foundations in <span className="font-mono font-semibold text-zinc-950 bg-[#e6f4ea] px-1.5 py-0.5 rounded border border-emerald-300">software engineering</span>, <span className="font-mono font-semibold text-zinc-950 bg-[#e8f0fe] px-1.5 py-0.5 rounded border border-blue-300">algorithms</span>, and <span className="font-mono font-semibold text-zinc-950 bg-[#fce8e6] px-1.5 py-0.5 rounded border border-rose-300">system design</span> to deliver scalable enterprise solutions.
             </p>
           </div>
 
@@ -185,23 +185,23 @@ export default function AboutSection() {
               <GraduationCap className="w-6 h-6 text-teal-700" />
             </div>
             <div className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-800 bg-white/80 px-2 py-0.5 rounded-md border border-teal-300 mb-2">
-              <MapPin className="w-3 h-3" />
-              <span>Bhubaneswar, Odisha</span>
+              <GraduationCap className="w-3 h-3" />
+              <span>Degree Completed • B.Tech CSE</span>
             </div>
             <h3 className="font-extrabold text-base sm:text-lg text-zinc-900 leading-snug">
               Siksha &apos;O&apos; Anusandhan University
             </h3>
             <p className="text-xs font-bold text-teal-900 mt-1">
-              B.Tech in Computer Science &amp; Engineering
+              B.Tech in Computer Science &amp; Engineering (Graduated)
             </p>
             <p className="text-xs text-zinc-700 mt-2.5 leading-relaxed">
-              Rigorous coursework in Data Structures, Algorithms, Computer Networks, Database Management Systems, Operating Systems, and Modern Software Engineering methodologies.
+              Successfully completed comprehensive coursework in Data Structures, Algorithms, Computer Networks, Database Systems, Operating Systems, and Distributed Computing.
             </p>
           </div>
 
           <div className="pt-4 mt-4 border-t border-teal-200 flex items-center justify-between text-[11px] font-semibold text-zinc-700">
-            <span>Core Focus: CSE</span>
-            <span className="font-mono bg-teal-200/60 px-2 py-0.5 rounded text-teal-950 font-bold">SOA University</span>
+            <span>Status: Degree Completed</span>
+            <span className="font-mono bg-teal-200/60 px-2 py-0.5 rounded text-teal-950 font-bold">B.Tech CSE Graduate</span>
           </div>
         </div>
 
@@ -216,22 +216,22 @@ export default function AboutSection() {
             </div>
             <div className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-800 bg-white/80 px-2 py-0.5 rounded-md border border-sky-300 mb-2">
               <Award className="w-3 h-3" />
-              <span>Full-Stack &amp; Systems</span>
+              <span>Tata Consultancy Services (TCS)</span>
             </div>
             <h3 className="font-extrabold text-base sm:text-lg text-zinc-900 leading-snug">
-              Architectural Craft &amp; Development
+              Software Engineer @ TCS
             </h3>
             <p className="text-xs font-bold text-sky-900 mt-1">
-              Next.js, TypeScript, Cloud &amp; APIs
+              Enterprise Systems, Cloud &amp; Full-Stack
             </p>
             <p className="text-xs text-zinc-700 mt-2.5 leading-relaxed">
-              Passionate about architecting responsive, high-performance web applications, resilient backend microservices, and AI-driven automation workflows with clean code principles.
+              Engineering robust, production-ready enterprise software, resilient backend services, and modern full-stack web applications with clean architecture and high performance.
             </p>
           </div>
 
           <div className="pt-4 mt-4 border-t border-sky-200 flex items-center justify-between text-[11px] font-semibold text-zinc-700">
-            <span>Specialty: Modern Web</span>
-            <span className="font-mono bg-sky-200/60 px-2 py-0.5 rounded text-sky-950 font-bold">Cloud &amp; DevOps</span>
+            <span>Role: Software Engineer</span>
+            <span className="font-mono bg-sky-200/60 px-2 py-0.5 rounded text-sky-950 font-bold">TCS Enterprise</span>
           </div>
         </div>
 

@@ -19,7 +19,7 @@ export default function Footer() {
         {/* Left Copyright */}
         <div className="text-zinc-600 font-medium text-center md:text-left">
           © 2026 <strong className="text-zinc-900 font-bold">Aniket Singh</strong>. All rights reserved.
-          <span className="hidden sm:inline text-zinc-400 ml-1.5">• Siksha &apos;O&apos; Anusandhan University</span>
+          <span className="hidden sm:inline text-zinc-400 ml-1.5">• Software Engineer @ TCS</span>
         </div>
 
         {/* Center Navigation Links */}

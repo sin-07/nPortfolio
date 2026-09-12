@@ -51,7 +51,7 @@ export default function Home() {
         {/* Featured Projects Section ("See Our Work") */}
         <Projects onSelectProject={(project) => setActiveProject(project)} />
 
-        {/* About Section (Aniket Singh - SOA University CSE) */}
+        {/* About Section (Aniket Singh - Software Engineer @ TCS) */}
         <AboutSection />
 
         {/* Bottom CTA Banner */}

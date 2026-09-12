@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ByteBloom | Ideas to Impact",
+  title: "Aniket Singh | Software Engineer @ TCS • Full Stack Developer",
   description:
-    "We Turn Ideas Into Real Products. Beautifully engineered solutions for a smarter, simpler world. Software, Cloud, AI, Data & Integrations.",
+    "Portfolio of Aniket Singh — Software Engineer at Tata Consultancy Services (TCS) & B.Tech CSE Graduate. Turning ideas into real enterprise products, scalable cloud backends, and modern full-stack solutions.",
   icons: {
     icon: "/images/bytebloom-logo.jpg",
   },

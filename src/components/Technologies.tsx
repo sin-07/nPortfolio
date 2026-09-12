@@ -438,7 +438,7 @@ export default function Technologies() {
               </h3>
             </div>
             <span className="text-xs font-mono text-zinc-600 hidden sm:inline">
-              Aniket Singh • SOA CSE
+              Aniket Singh • Software Engineer @ TCS
             </span>
           </div>
 
