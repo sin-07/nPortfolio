@@ -196,6 +196,27 @@ export default function Hero({ onOpenContact }: HeroProps) {
               &lt;/&gt; ANIKET SINGH • TCS SOFTWARE ENGINEER
             </div>
           </div>
+
+          {/* Floating Engineer Cartoon Avatar Badge */}
+          <div className="absolute -bottom-4 -left-2 sm:-bottom-5 sm:-left-3 z-20 bg-white border-2 border-zinc-900 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 shadow-[3.5px_3.5px_0px_#1e1e1e] flex items-center gap-2.5 sm:gap-3 transform -rotate-2 hover:rotate-0 transition-transform">
+            <div className="relative w-11 h-11 sm:w-13 sm:h-13 rounded-lg sm:rounded-xl overflow-hidden border border-zinc-900 flex-shrink-0 bg-emerald-50 shadow-[1px_1px_0px_#1e1e1e]">
+              <Image
+                src="/images/aniket-portrait.jpg"
+                alt="Aniket Singh - Software Engineer @ TCS"
+                fill
+                sizes="60px"
+                className="object-cover"
+              />
+            </div>
+            <div className="pr-1 sm:pr-2">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase text-emerald-700">TCS Engineer</span>
+              </div>
+              <p className="text-xs sm:text-sm font-extrabold text-zinc-950 font-sans leading-tight">Aniket Singh</p>
+              <p className="text-[10px] sm:text-xs text-zinc-600 font-medium">B.Tech CSE Graduate</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

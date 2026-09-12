@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Menu, X } from "lucide-react";
 import gsap from "gsap";
 
@@ -170,13 +171,14 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand Logo - Aniket Singh */}
         <Link href="#home" className="flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 overflow-hidden rounded-md border-1.5 border-zinc-900 bg-[#e8f5ea] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1e1e1e]">
-            {/* Pixel Sprout Icon */}
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-emerald-600">
-              <path d="M12 2C12 2 11 7 7 8C7 11 9 13 11 13V18H13V12C15 12 17 10 17 7C13 6 12 2 12 2Z" fill="#16a34a" />
-              <path d="M9 19H15V22H9V19Z" fill="#b45309" />
-              <circle cx="12" cy="6" r="1.5" fill="#86efac" />
-            </svg>
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 overflow-hidden rounded-xl border-1.5 border-zinc-900 bg-[#def7ec] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1e1e1e] group-hover:scale-105 transition-transform flex-shrink-0">
+            <Image
+              src="/images/aniket-portrait.jpg"
+              alt="Aniket Singh - Software Engineer @ TCS"
+              fill
+              sizes="40px"
+              className="object-cover"
+            />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">

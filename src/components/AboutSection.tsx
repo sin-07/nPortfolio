@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import Image from "next/image";
 import { GraduationCap, Code2, Sparkles, BookOpen, MapPin, Award, Terminal, Cpu, Layers } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -125,50 +126,91 @@ export default function AboutSection() {
         </div>
 
         {/* Terminal Content */}
-        <div className="p-6 sm:p-8 space-y-6">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-bold bg-[#eae0f5] text-purple-950 border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] mb-3">
-              <Terminal className="w-3.5 h-3.5 text-purple-700" />
-              <span>WHO I AM &amp; WHAT DRIVES ME</span>
+        <div className="p-6 sm:p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Col: Text & Manifesto */}
+            <div className="lg:col-span-8 space-y-6">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-bold bg-[#eae0f5] text-purple-950 border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] mb-3">
+                  <Terminal className="w-3.5 h-3.5 text-purple-700" />
+                  <span>WHO I AM &amp; WHAT DRIVES ME</span>
+                </div>
+
+                <h3 className="font-pixel text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight leading-tight">
+                  Software Engineer at TCS &amp; Full Stack Developer
+                </h3>
+              </div>
+
+              {/* Statement Paragraphs */}
+              <div className="space-y-4">
+                <p className="text-base sm:text-lg text-zinc-900 leading-relaxed font-medium border-l-3 border-emerald-500 pl-4 py-0.5">
+                  A dedicated creator passionate about <span className="font-extrabold text-zinc-950 underline decoration-emerald-400 decoration-2 underline-offset-2">turning ideas into reality</span>. Whether it&apos;s crafting compelling narratives, designing captivating visuals, or solving complex problems, I thrive on challenges.
+                </p>
+
+                <p className="text-sm sm:text-base text-zinc-700 leading-relaxed border-l-3 border-sky-400 pl-4 py-0.5">
+                  <span className="font-bold text-zinc-900">B.Tech Graduate in Computer Science &amp; Engineering</span>, currently working as a <span className="font-bold text-zinc-900">Software Engineer at Tata Consultancy Services (TCS)</span>. Leveraging solid computer science foundations in <span className="font-mono font-semibold text-zinc-950 bg-[#e6f4ea] px-1.5 py-0.5 rounded border border-emerald-300">software engineering</span>, <span className="font-mono font-semibold text-zinc-950 bg-[#e8f0fe] px-1.5 py-0.5 rounded border border-blue-300">algorithms</span>, and <span className="font-mono font-semibold text-zinc-950 bg-[#fce8e6] px-1.5 py-0.5 rounded border border-rose-300">system design</span> to deliver scalable enterprise solutions.
+                </p>
+              </div>
+
+              {/* Cool Skill Foundation Badges */}
+              <div className="pt-2 border-t border-zinc-300 flex flex-wrap items-center gap-2">
+                <span className="text-xs font-mono font-bold text-zinc-500 uppercase mr-1">
+                  // Core Foundations:
+                </span>
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#def7ec] text-emerald-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
+                  <Code2 className="w-3.5 h-3.5 text-emerald-700" />
+                  Software Development
+                </span>
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#dff1fa] text-sky-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
+                  <Cpu className="w-3.5 h-3.5 text-sky-700" />
+                  Algorithms &amp; Data Structures
+                </span>
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#fdece4] text-amber-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
+                  <Layers className="w-3.5 h-3.5 text-amber-700" />
+                  System Design
+                </span>
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#f0ebfa] text-purple-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-700" />
+                  Captivating Visuals &amp; Narratives
+                </span>
+              </div>
             </div>
 
-            <h3 className="font-pixel text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight leading-tight">
-              Software Engineer at TCS &amp; Full Stack Developer
-            </h3>
-          </div>
+            {/* Right Col: Neo-Brutalist Illustrated Portrait Card */}
+            <div className="lg:col-span-4 flex justify-center">
+              <div className="relative group w-full max-w-[280px]">
+                {/* Decorative retro sticker pin */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 bg-[#fdece4] border-1.5 border-zinc-900 text-[10px] font-mono font-bold px-3 py-0.5 rounded shadow-[1.5px_1.5px_0px_#1e1e1e] rotate-[-2deg]">
+                  ENGINEER PROFILE
+                </div>
 
-          {/* Statement Paragraphs */}
-          <div className="space-y-4 max-w-3xl">
-            <p className="text-base sm:text-lg text-zinc-900 leading-relaxed font-medium border-l-3 border-emerald-500 pl-4 py-0.5">
-              A dedicated creator passionate about <span className="font-extrabold text-zinc-950 underline decoration-emerald-400 decoration-2 underline-offset-2">turning ideas into reality</span>. Whether it&apos;s crafting compelling narratives, designing captivating visuals, or solving complex problems, I thrive on challenges.
-            </p>
+                {/* Main Portrait Card */}
+                <div className="bg-white p-3 rounded-2xl border-2.5 border-zinc-900 shadow-[5px_5px_0px_#1e1e1e] transform rotate-1 group-hover:rotate-0 transition-transform duration-300">
+                  <div className="relative aspect-square w-full rounded-xl overflow-hidden border-1.5 border-zinc-900 bg-amber-50 shadow-[1.5px_1.5px_0px_#1e1e1e]">
+                    <Image
+                      src="/images/aniket-portrait.jpg"
+                      alt="Aniket Singh - Software Engineer @ TCS"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      className="object-cover"
+                    />
+                  </div>
 
-            <p className="text-sm sm:text-base text-zinc-700 leading-relaxed border-l-3 border-sky-400 pl-4 py-0.5">
-              <span className="font-bold text-zinc-900">B.Tech Graduate in Computer Science &amp; Engineering</span>, currently working as a <span className="font-bold text-zinc-900">Software Engineer at Tata Consultancy Services (TCS)</span>. Leveraging solid computer science foundations in <span className="font-mono font-semibold text-zinc-950 bg-[#e6f4ea] px-1.5 py-0.5 rounded border border-emerald-300">software engineering</span>, <span className="font-mono font-semibold text-zinc-950 bg-[#e8f0fe] px-1.5 py-0.5 rounded border border-blue-300">algorithms</span>, and <span className="font-mono font-semibold text-zinc-950 bg-[#fce8e6] px-1.5 py-0.5 rounded border border-rose-300">system design</span> to deliver scalable enterprise solutions.
-            </p>
-          </div>
-
-          {/* Cool Skill Foundation Badges */}
-          <div className="pt-2 border-t border-zinc-300 flex flex-wrap items-center gap-2">
-            <span className="text-xs font-mono font-bold text-zinc-500 uppercase mr-1">
-              // Core Foundations:
-            </span>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#def7ec] text-emerald-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
-              <Code2 className="w-3.5 h-3.5 text-emerald-700" />
-              Software Development
-            </span>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#dff1fa] text-sky-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
-              <Cpu className="w-3.5 h-3.5 text-sky-700" />
-              Algorithms &amp; Data Structures
-            </span>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#fdece4] text-amber-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
-              <Layers className="w-3.5 h-3.5 text-amber-700" />
-              System Design
-            </span>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-[#f0ebfa] text-purple-950 border border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
-              <Sparkles className="w-3.5 h-3.5 text-purple-700" />
-              Captivating Visuals &amp; Narratives
-            </span>
+                  <div className="pt-3 text-center space-y-1">
+                    <div className="inline-flex items-center gap-1.5 bg-[#def7ec] border border-zinc-900 px-2.5 py-0.5 rounded-full text-[11px] font-bold text-emerald-950 shadow-[1px_1px_0px_#1e1e1e]">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Software Engineer @ TCS</span>
+                    </div>
+                    <h4 className="font-extrabold text-base text-zinc-950 tracking-tight font-sans">
+                      Aniket Singh
+                    </h4>
+                    <p className="text-[11px] text-zinc-600 font-medium">
+                      B.Tech CSE Graduate • Tata Consultancy Services
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
