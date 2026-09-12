@@ -1,19 +1,63 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Image from "next/image";
 import { ArrowRight, Heart, Smile, Star } from "lucide-react";
+import gsap from "gsap";
 
 interface HeroProps {
   onOpenContact: () => void;
 }
 
 export default function Hero({ onOpenContact }: HeroProps) {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
+  const stickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Left side content slides in smoothly from the left
+      gsap.from(leftColRef.current, {
+        x: -70,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+      });
+
+      // Right side artwork slides in from the right
+      gsap.from(rightColRef.current, {
+        x: 70,
+        opacity: 0,
+        duration: 1.0,
+        delay: 0.1,
+        ease: "power3.out",
+      });
+
+      // Idle float for retro sticker
+      if (stickerRef.current) {
+        gsap.to(stickerRef.current, {
+          y: -5,
+          duration: 2.4,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="home" className="pt-8 pb-16 px-4 sm:px-8 max-w-7xl mx-auto overflow-hidden bg-[#f5f4ed]">
+    <section
+      id="home"
+      ref={heroRef}
+      className="pt-8 pb-16 px-4 sm:px-8 max-w-7xl mx-auto overflow-hidden bg-[#f5f4ed]"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-        {/* Left Column: Typography & CTAs */}
-        <div className="lg:col-span-6 flex flex-col space-y-6">
+        {/* Left Column: Typography & CTAs - Animates from LEFT */}
+        <div ref={leftColRef} className="lg:col-span-6 flex flex-col space-y-6">
           {/* Tag Badges */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs sm:text-sm font-pixel font-bold bg-[#eae0f5] text-zinc-950 border-1.5 border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]">
@@ -119,8 +163,8 @@ export default function Hero({ onOpenContact }: HeroProps) {
           </div>
         </div>
 
-        {/* Right Column: Cozy Pixel Desk Artwork */}
-        <div className="lg:col-span-6 relative flex justify-center items-center">
+        {/* Right Column: Cozy Pixel Desk Artwork - Animates from RIGHT */}
+        <div ref={rightColRef} className="lg:col-span-6 relative flex justify-center items-center">
           <div className="relative w-full max-w-[560px] aspect-[4/3] rounded-2xl overflow-hidden border-2.5 border-zinc-900 shadow-[6px_6px_0px_#1e1e1e] bg-[#e6e2d3]">
             <Image
               src="/images/hero-desk.jpg"
@@ -132,7 +176,10 @@ export default function Hero({ onOpenContact }: HeroProps) {
             />
 
             {/* Cute speech bubble sticker floating */}
-            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-white border-2 border-zinc-900 px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#1e1e1e] flex items-center gap-1.5 transform -rotate-2 hover:rotate-0 transition-transform">
+            <div
+              ref={stickerRef}
+              className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-white border-2 border-zinc-900 px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#1e1e1e] flex items-center gap-1.5 transform -rotate-2 hover:rotate-0 transition-transform"
+            >
               <span className="text-xs font-bold text-zinc-900 font-pixel">
                 Let&apos;s Build Together!
               </span>

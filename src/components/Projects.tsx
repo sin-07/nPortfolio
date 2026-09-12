@@ -1,8 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface ProjectsProps {
   onSelectProject: (project: Project) => void;
@@ -19,6 +25,43 @@ export interface Project {
 
 export default function Projects({ onSelectProject }: ProjectsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header appearance
+      gsap.from(".projects-header", {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+        },
+        x: -60,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+
+      // Alternating Left & Right card appearance
+      cardRefs.current.forEach((card, idx) => {
+        if (!card) return;
+        const fromLeft = idx % 2 === 0;
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+          },
+          x: fromLeft ? -60 : 60,
+          opacity: 0,
+          duration: 0.8,
+          delay: (idx % 3) * 0.08,
+          ease: "power3.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const projects: Project[] = [
     {
@@ -77,9 +120,13 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
   };
 
   return (
-    <section id="projects" className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed]">
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed] overflow-hidden"
+    >
       {/* Header Row */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <div className="projects-header flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
           <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase">
             — FEATURED PROJECTS
@@ -128,6 +175,9 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
             {projects.map((proj, idx) => (
               <div
                 key={proj.id}
+                ref={(el) => {
+                  cardRefs.current[idx] = el;
+                }}
                 onClick={() => onSelectProject(proj)}
                 className={`bg-[#FAF8F3] border-2 ${
                   currentIndex === idx

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import {
   Laptop,
   ShoppingCart,
@@ -14,12 +14,55 @@ import {
   Wrench,
   ArrowRight,
 } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface ServicesProps {
   onSelectService: (serviceName: string) => void;
 }
 
 export default function Services({ onSelectService }: ServicesProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header animation
+      gsap.from(".services-header", {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+        },
+        x: -60,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+
+      // Left & Right alternating card appearance
+      cardsRef.current.forEach((card, index) => {
+        if (!card) return;
+        const fromLeft = index % 2 === 0;
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+          },
+          x: fromLeft ? -50 : 50,
+          opacity: 0,
+          duration: 0.75,
+          delay: (index % 3) * 0.08,
+          ease: "power3.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
   const services = [
     {
       id: "custom-software",
@@ -104,9 +147,13 @@ export default function Services({ onSelectService }: ServicesProps) {
   ];
 
   return (
-    <section id="services" className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed]">
+    <section
+      id="services"
+      ref={sectionRef}
+      className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed] overflow-hidden"
+    >
       {/* Header Row */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+      <div className="services-header flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
         <div>
           <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase">
             — OUR SERVICES
@@ -139,11 +186,14 @@ export default function Services({ onSelectService }: ServicesProps) {
 
       {/* Services Grid (10 cards) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4.5">
-        {services.map((srv) => {
+        {services.map((srv, idx) => {
           const IconComponent = srv.icon;
           return (
             <div
               key={srv.id}
+              ref={(el) => {
+                cardsRef.current[idx] = el;
+              }}
               onClick={() => onSelectService(srv.title)}
               className={`${srv.bgLight} p-5 rounded-2xl border-2 border-zinc-900 shadow-[3px_3px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4.5px_4.5px_0px_#1e1e1e] transition-all cursor-pointer group min-h-[170px]`}
             >

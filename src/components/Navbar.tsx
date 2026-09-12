@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X } from "lucide-react";
+import gsap from "gsap";
 
 interface NavbarProps {
   onOpenContact: () => void;
@@ -11,17 +12,24 @@ interface NavbarProps {
 
 export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home");
+  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const navRef = useRef<HTMLElement>(null);
+  const pillRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const isInitialMount = useRef(true);
+
+  // Scroll spy to detect active section
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "services", "technologies", "projects", "about", "contact"];
+      const sections = ["home", "services", "projects", "technologies", "about", "contact"];
       const scrollY = window.scrollY;
 
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
-          const top = el.offsetTop - 120;
+          const top = el.offsetTop - 140;
           const height = el.offsetHeight;
           if (scrollY >= top && scrollY < top + height) {
             setActiveSection(section);
@@ -31,9 +39,77 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // GSAP ultra-smooth sliding pill animation
+  useEffect(() => {
+    const currentTargetId = hoveredSection || activeSection;
+    const targetElement = itemRefs.current[currentTargetId];
+    const navContainer = navRef.current;
+    const pill = pillRef.current;
+
+    if (!targetElement || !navContainer || !pill) return;
+
+    const navRect = navContainer.getBoundingClientRect();
+    const targetRect = targetElement.getBoundingClientRect();
+
+    const x = targetRect.left - navRect.left;
+    const y = targetRect.top - navRect.top;
+    const width = targetRect.width;
+    const height = targetRect.height;
+
+    if (isInitialMount.current) {
+      // Immediate set on mount without jarring slide from 0
+      gsap.set(pill, {
+        x,
+        y,
+        width,
+        height,
+        opacity: 1,
+      });
+      isInitialMount.current = false;
+    } else {
+      // Fluid spring-smooth glide
+      gsap.to(pill, {
+        x,
+        y,
+        width,
+        height,
+        opacity: 1,
+        duration: 0.38,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    }
+  }, [activeSection, hoveredSection]);
+
+  // Recalculate position on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const currentTargetId = hoveredSection || activeSection;
+      const targetElement = itemRefs.current[currentTargetId];
+      const navContainer = navRef.current;
+      const pill = pillRef.current;
+
+      if (!targetElement || !navContainer || !pill) return;
+
+      const navRect = navContainer.getBoundingClientRect();
+      const targetRect = targetElement.getBoundingClientRect();
+
+      gsap.set(pill, {
+        x: targetRect.left - navRect.left,
+        y: targetRect.top - navRect.top,
+        width: targetRect.width,
+        height: targetRect.height,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeSection, hoveredSection]);
 
   const navItems = [
     { label: "Home", id: "home", href: "#home" },
@@ -72,22 +148,35 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
           </div>
         </Link>
 
-        {/* Desktop Navigation Capsule */}
-        <nav className="hidden md:flex items-center bg-[#eae9df]/90 border border-zinc-400/80 rounded-full p-1 shadow-[1px_1px_0px_#1e1e1e]">
+        {/* Desktop Navigation Capsule with GSAP Smooth Sliding Pill */}
+        <nav
+          ref={navRef}
+          onMouseLeave={() => setHoveredSection(null)}
+          className="relative hidden md:flex items-center bg-[#eae9df]/90 border border-zinc-400/80 rounded-full p-1 shadow-[1px_1px_0px_#1e1e1e]"
+        >
+          {/* Animated Sliding Pill Indicator */}
+          <div
+            ref={pillRef}
+            className="absolute top-1 left-0 rounded-full bg-[#c3e3c3] border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] pointer-events-none z-0 opacity-0 will-change-transform"
+          />
+
           {navItems.map((item) => {
-            const isActive = activeSection === item.id;
+            const isTarget = (hoveredSection || activeSection) === item.id;
             return (
               <a
                 key={item.id}
-                href={item.href}
-                onClick={(e) => {
-                  if (item.id === "about") {
-                    // smooth scroll or open about
-                  }
+                ref={(el) => {
+                  itemRefs.current[item.id] = el;
                 }}
-                className={`text-xs lg:text-sm font-semibold transition-all px-3.5 py-1.5 rounded-full ${
-                  isActive
-                    ? "bg-[#c3e3c3] text-zinc-950 border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e]"
+                href={item.href}
+                onMouseEnter={() => setHoveredSection(item.id)}
+                onClick={() => {
+                  setActiveSection(item.id);
+                  setHoveredSection(null);
+                }}
+                className={`relative z-10 text-xs lg:text-sm font-semibold px-3.5 py-1.5 rounded-full transition-colors duration-200 select-none ${
+                  isTarget
+                    ? "text-zinc-950 font-bold"
                     : "text-zinc-700 hover:text-zinc-950"
                 }`}
               >

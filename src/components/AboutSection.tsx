@@ -1,13 +1,96 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { GraduationCap, Code2, Sparkles, BookOpen, MapPin, Award, Terminal, Cpu, Layers } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function AboutSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const cardLeftRef = useRef<HTMLDivElement>(null);
+  const cardCenterRef = useRef<HTMLDivElement>(null);
+  const cardRightRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header appearance
+      gsap.from(".about-header", {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+        },
+        x: -50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+
+      // Terminal card appearance
+      gsap.from(terminalRef.current, {
+        scrollTrigger: {
+          trigger: terminalRef.current,
+          start: "top 88%",
+        },
+        scale: 0.96,
+        opacity: 0,
+        duration: 0.85,
+        ease: "power3.out",
+      });
+
+      // Left card slides in from LEFT
+      gsap.from(cardLeftRef.current, {
+        scrollTrigger: {
+          trigger: cardLeftRef.current,
+          start: "top 90%",
+        },
+        x: -60,
+        opacity: 0,
+        duration: 0.85,
+        ease: "power3.out",
+      });
+
+      // Center card slides up
+      gsap.from(cardCenterRef.current, {
+        scrollTrigger: {
+          trigger: cardCenterRef.current,
+          start: "top 90%",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.85,
+        delay: 0.1,
+        ease: "power3.out",
+      });
+
+      // Right card slides in from RIGHT
+      gsap.from(cardRightRef.current, {
+        scrollTrigger: {
+          trigger: cardRightRef.current,
+          start: "top 90%",
+        },
+        x: 60,
+        opacity: 0,
+        duration: 0.85,
+        delay: 0.2,
+        ease: "power3.out",
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
   return (
-    <section id="about" className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed]">
+    <section
+      id="about"
+      ref={sectionRef}
+      className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed] overflow-hidden"
+    >
       {/* Header Row */}
-      <div className="mb-10">
+      <div className="about-header mb-10">
         <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase">
           — ABOUT THE ENGINEER
         </span>
@@ -20,7 +103,10 @@ export default function AboutSection() {
       </div>
 
       {/* Featured Cool Terminal Card */}
-      <div className="mb-10 bg-[#FAF8F3] rounded-2xl border-2.5 border-zinc-900 shadow-[5px_5px_0px_#1e1e1e] overflow-hidden">
+      <div
+        ref={terminalRef}
+        className="mb-10 bg-[#FAF8F3] rounded-2xl border-2.5 border-zinc-900 shadow-[5px_5px_0px_#1e1e1e] overflow-hidden"
+      >
         {/* Terminal Title Bar */}
         <div className="bg-[#edeae1] border-b-2 border-zinc-900 px-4 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -87,10 +173,13 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* 3 Neo-Brutalist Highlight Cards */}
+      {/* 3 Neo-Brutalist Highlight Cards - Left, Center & Right animations */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Education Card */}
-        <div className="bg-[#def7ec] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all">
+        {/* Education Card - Animates from LEFT */}
+        <div
+          ref={cardLeftRef}
+          className="bg-[#def7ec] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
+        >
           <div>
             <div className="w-11 h-11 rounded-xl bg-white border border-zinc-900 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_#1e1e1e]">
               <GraduationCap className="w-6 h-6 text-teal-700" />
@@ -116,8 +205,11 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Technical Craft Card */}
-        <div className="bg-[#dff1fa] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all">
+        {/* Technical Craft Card - Animates from BOTTOM */}
+        <div
+          ref={cardCenterRef}
+          className="bg-[#dff1fa] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
+        >
           <div>
             <div className="w-11 h-11 rounded-xl bg-white border border-zinc-900 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_#1e1e1e]">
               <Code2 className="w-6 h-6 text-sky-700" />
@@ -143,8 +235,11 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Vision & Product Impact */}
-        <div className="bg-[#fdece4] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all">
+        {/* Vision & Product Impact - Animates from RIGHT */}
+        <div
+          ref={cardRightRef}
+          className="bg-[#fdece4] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
+        >
           <div>
             <div className="w-11 h-11 rounded-xl bg-white border border-zinc-900 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_#1e1e1e]">
               <Sparkles className="w-6 h-6 text-amber-700" />

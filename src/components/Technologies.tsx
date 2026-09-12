@@ -1,9 +1,61 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Technologies() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header appearance
+      gsap.from(".tech-header", {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+        },
+        y: -35,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+
+      // Row 1 sweeps in from LEFT
+      gsap.from(row1Ref.current, {
+        scrollTrigger: {
+          trigger: row1Ref.current,
+          start: "top 90%",
+        },
+        x: -70,
+        opacity: 0,
+        duration: 0.85,
+        ease: "power3.out",
+      });
+
+      // Row 2 sweeps in from RIGHT
+      gsap.from(row2Ref.current, {
+        scrollTrigger: {
+          trigger: row2Ref.current,
+          start: "top 90%",
+        },
+        x: 70,
+        opacity: 0,
+        duration: 0.85,
+        delay: 0.1,
+        ease: "power3.out",
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
   const row1 = [
     {
       name: ".NET",
@@ -261,9 +313,13 @@ export default function Technologies() {
   ];
 
   return (
-    <section id="technologies" className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed]">
+    <section
+      id="technologies"
+      ref={sectionRef}
+      className="py-16 px-4 sm:px-8 max-w-7xl mx-auto bg-[#f5f4ed] overflow-hidden"
+    >
       {/* Header Row */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+      <div className="tech-header flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
         <div>
           <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase">
             — TECHNOLOGIES
@@ -303,8 +359,11 @@ export default function Technologies() {
         </div>
       </div>
 
-      {/* Row 1 Grid */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-3 mb-3">
+      {/* Row 1 Grid - Sweeps in from LEFT */}
+      <div
+        ref={row1Ref}
+        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-3 mb-3"
+      >
         {row1.map((item, idx) => (
           <div
             key={idx}
@@ -320,8 +379,11 @@ export default function Technologies() {
         ))}
       </div>
 
-      {/* Row 2 Grid */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-13 gap-3">
+      {/* Row 2 Grid - Sweeps in from RIGHT */}
+      <div
+        ref={row2Ref}
+        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-13 gap-3"
+      >
         {row2.map((item, idx) => (
           <div
             key={idx}
