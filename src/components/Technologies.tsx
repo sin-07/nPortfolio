@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
-import { ArrowRight } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,9 +10,27 @@ if (typeof window !== "undefined") {
 }
 
 export default function Technologies() {
+  const [showFullStack, setShowFullStack] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const row1Ref = useRef<HTMLDivElement>(null);
   const row2Ref = useRef<HTMLDivElement>(null);
+  const fullStackRef = useRef<HTMLDivElement>(null);
+
+  // Animate dropdown tray appearance with GSAP
+  useEffect(() => {
+    if (showFullStack && fullStackRef.current) {
+      gsap.fromTo(
+        fullStackRef.current,
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.2)" }
+      );
+      gsap.fromTo(
+        ".stack-category-card",
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.35, stagger: 0.08, ease: "power2.out" }
+      );
+    }
+  }, [showFullStack]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -349,12 +367,17 @@ export default function Technologies() {
             </div>
           </div>
 
-          {/* View All Button */}
+          {/* View All Toggle Button */}
           <button
+            onClick={() => setShowFullStack(!showFullStack)}
             className="inline-flex items-center gap-1.5 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-xl px-4 py-2 font-bold text-xs sm:text-sm shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
           >
-            <span>View All</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>{showFullStack ? "Hide Stack" : "View All Stack"}</span>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-200 ${
+                showFullStack ? "rotate-180" : ""
+              }`}
+            />
           </button>
         </div>
       </div>
@@ -398,6 +421,86 @@ export default function Technologies() {
           </div>
         ))}
       </div>
+
+      {/* GSAP Animated Full Stack Dropdown Tray */}
+      {showFullStack && (
+        <div
+          ref={fullStackRef}
+          className="mt-6 p-6 sm:p-8 bg-[#FAF8F3] border-2.5 border-zinc-900 rounded-2xl shadow-[5px_5px_0px_#1e1e1e] will-change-transform"
+        >
+          <div className="flex items-center justify-between mb-5 border-b-2 border-zinc-900 pb-3">
+            <div>
+              <span className="text-[10px] font-mono uppercase font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded">
+                Categorized Toolkit
+              </span>
+              <h3 className="text-xl font-extrabold text-zinc-950 mt-1">
+                Full Technical Architecture &amp; Ecosystem
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-zinc-600 hidden sm:inline">
+              Aniket Singh • SOA CSE
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Frontend */}
+            <div className="stack-category-card bg-[#def7ec] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+              <span className="text-xs font-bold font-mono text-teal-900 block mb-2">
+                01. FRONTEND &amp; UI
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP", "Vue.js", "HTML5/CSS3"].map((t) => (
+                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Backend */}
+            <div className="stack-category-card bg-[#dff1fa] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+              <span className="text-xs font-bold font-mono text-sky-900 block mb-2">
+                02. BACKEND &amp; APIS
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {["Node.js", "Express", "Python", "FastAPI", "C#", ".NET Core", "REST & GraphQL"].map((t) => (
+                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Databases */}
+            <div className="stack-category-card bg-[#fdece4] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+              <span className="text-xs font-bold font-mono text-amber-900 block mb-2">
+                03. DATA &amp; STORAGE
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {["PostgreSQL", "MongoDB", "Redis", "Supabase", "MySQL", "Prisma"].map((t) => (
+                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Cloud & Tools */}
+            <div className="stack-category-card bg-[#f0ebfa] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+              <span className="text-xs font-bold font-mono text-purple-900 block mb-2">
+                04. DEVOPS &amp; TOOLS
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {["Docker", "AWS", "Git/GitHub", "Vercel", "Linux", "Figma", "Postman"].map((t) => (
+                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

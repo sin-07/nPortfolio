@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, ChevronDown, Check } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -21,12 +21,28 @@ export interface Project {
   tags: string[];
   description: string;
   metrics: string;
+  category?: string;
 }
 
 export default function Projects({ onSelectProject }: ProjectsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
   const sectionRef = useRef<HTMLElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const filterMenuRef = useRef<HTMLDivElement>(null);
+
+  // GSAP animation for filter dropdown
+  useEffect(() => {
+    if (filterOpen && filterMenuRef.current) {
+      gsap.fromTo(
+        filterMenuRef.current,
+        { scale: 0.94, y: -8, opacity: 0 },
+        { scale: 1, y: 0, opacity: 1, duration: 0.25, ease: "back.out(1.35)" }
+      );
+    }
+  }, [filterOpen]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -67,6 +83,7 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     {
       id: "erp-quotation",
       title: "ERP & Quotation System",
+      category: "ERP",
       image: "/images/project-erp.jpg",
       tags: [".NET", "PostgreSQL", "AWS"],
       description:
@@ -76,6 +93,7 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     {
       id: "ecommerce-platform",
       title: "E-Commerce Platform",
+      category: "E-Commerce",
       image: "/images/project-ecommerce.jpg",
       tags: ["MERN", "Stripe", "Vercel"],
       description:
@@ -85,6 +103,7 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     {
       id: "ai-doc-analysis",
       title: "AI Document Analysis",
+      category: "AI",
       image: "/images/project-ai.jpg",
       tags: ["Python", "OpenAI", "Docker"],
       description:
@@ -94,6 +113,7 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     {
       id: "logistics-tracking",
       title: "Logistics & Tracking",
+      category: "Logistics",
       image: "/images/project-logistics.jpg",
       tags: ["Node.js", "MongoDB", "AWS"],
       description:
@@ -103,6 +123,7 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     {
       id: "3d-real-estate",
       title: "3D Real Estate Portal",
+      category: "E-Commerce",
       image: "/images/project-real-estate.jpg",
       tags: ["Three.js", "React", "AWS"],
       description:
@@ -118,6 +139,15 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
   };
+
+  const filteredProjects =
+    selectedCategory === "All"
+      ? projects
+      : projects.filter(
+          (p) =>
+            p.category === selectedCategory ||
+            p.tags.some((t) => t.toLowerCase().includes(selectedCategory.toLowerCase()))
+        );
 
   return (
     <section
@@ -164,6 +194,63 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
         </div>
       </div>
 
+      {/* GSAP Animated Category Dropdown Filter Bar */}
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+        <div className="relative inline-block text-left">
+          <button
+            type="button"
+            onClick={() => setFilterOpen(!filterOpen)}
+            className="inline-flex items-center gap-2 bg-[#FAF8F3] hover:bg-white text-zinc-900 border-2 border-zinc-900 rounded-xl px-3.5 py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
+          >
+            <span className="text-zinc-500 font-mono text-xs">Filter Category:</span>
+            <span className="text-emerald-950">{selectedCategory === "All" ? "All Projects" : selectedCategory}</span>
+            <ChevronDown
+              className={`w-4 h-4 text-zinc-800 transition-transform duration-200 ${
+                filterOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {filterOpen && (
+            <div
+              ref={filterMenuRef}
+              className="absolute left-0 mt-2 w-56 rounded-xl bg-[#FAF8F3] border-2 border-zinc-900 shadow-[4px_4px_0px_#1e1e1e] p-1.5 z-30 space-y-1 will-change-transform"
+            >
+              {[
+                { label: "All Real-World Projects", id: "All" },
+                { label: "Enterprise & ERP", id: "ERP" },
+                { label: "E-Commerce Platforms", id: "E-Commerce" },
+                { label: "AI & Automation", id: "AI" },
+                { label: "Logistics & Fleet", id: "Logistics" },
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory(cat.id);
+                    setFilterOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                    selectedCategory === cat.id
+                      ? "bg-[#c3e3c3] text-zinc-950 font-extrabold"
+                      : "hover:bg-zinc-200/60 text-zinc-800"
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                  {selectedCategory === cat.id && (
+                    <Check className="w-3.5 h-3.5 text-emerald-700" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <span className="text-xs font-mono font-semibold text-zinc-600 bg-white/80 border border-zinc-400 px-2.5 py-1 rounded-md shadow-[1px_1px_0px_#1e1e1e]">
+          Showing {filteredProjects.length} of {projects.length} Case Studies
+        </span>
+      </div>
+
       {/* Projects Carousel Container */}
       <div className="relative">
         {/* Navigation Arrows */}
@@ -186,7 +273,7 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
         {/* Carousel Grid */}
         <div className="overflow-x-auto pb-4 pt-1 px-1 no-scrollbar scroll-smooth">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 min-w-[700px] lg:min-w-0">
-            {projects.map((proj, idx) => (
+            {filteredProjects.map((proj, idx) => (
               <div
                 key={proj.id}
                 ref={(el) => {

@@ -14,11 +14,56 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home");
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMenuRendered, setIsMenuRendered] = useState(false);
 
   const navRef = useRef<HTMLElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const isInitialMount = useRef(true);
+
+  const toggleMobileMenu = () => {
+    if (!mobileMenuOpen) {
+      setIsMenuRendered(true);
+      setMobileMenuOpen(true);
+    } else {
+      closeMobileMenu();
+    }
+  };
+
+  const closeMobileMenu = () => {
+    if (mobileMenuRef.current) {
+      gsap.to(mobileMenuRef.current, {
+        opacity: 0,
+        y: -12,
+        duration: 0.22,
+        ease: "power2.in",
+        onComplete: () => {
+          setIsMenuRendered(false);
+          setMobileMenuOpen(false);
+        },
+      });
+    } else {
+      setIsMenuRendered(false);
+      setMobileMenuOpen(false);
+    }
+  };
+
+  // Animate mobile dropdown appearance with GSAP
+  useEffect(() => {
+    if (isMenuRendered && mobileMenuRef.current) {
+      gsap.fromTo(
+        mobileMenuRef.current,
+        { opacity: 0, y: -15 },
+        { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }
+      );
+      gsap.fromTo(
+        ".mobile-nav-item",
+        { x: -25, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.28, stagger: 0.045, ease: "power3.out" }
+      );
+    }
+  }, [isMenuRendered]);
 
   // Scroll spy to detect active section
   useEffect(() => {
@@ -205,31 +250,34 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg border-2 border-zinc-900 bg-[#eae9df] shadow-[2px_2px_0px_#1e1e1e]"
-            aria-label="Open Mobile Menu"
+            onClick={toggleMobileMenu}
+            className="md:hidden p-2 rounded-lg border-2 border-zinc-900 bg-[#eae9df] shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
+            aria-label="Toggle Mobile Menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-5 h-5 text-zinc-900" />
+              <X className="w-5 h-5 text-zinc-900 transition-transform rotate-90" />
             ) : (
-              <Menu className="w-5 h-5 text-zinc-900" />
+              <Menu className="w-5 h-5 text-zinc-900 transition-transform" />
             )}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden mt-3 pt-3 border-t border-zinc-300 flex flex-col gap-2">
+      {/* Animated Mobile Menu Dropdown */}
+      {isMenuRendered && (
+        <div
+          ref={mobileMenuRef}
+          className="md:hidden mt-3 pt-3 border-t-2 border-zinc-900/40 flex flex-col gap-2 will-change-transform"
+        >
           {navItems.map((item) => (
             <a
               key={item.id}
               href={item.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold border ${
+              onClick={() => closeMobileMenu()}
+              className={`mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 transition-all cursor-pointer ${
                 activeSection === item.id
-                  ? "bg-[#c3e3c3] text-zinc-950 border-zinc-900"
-                  : "bg-[#eae9df]/80 text-zinc-800 border-zinc-400/50"
+                  ? "bg-[#c3e3c3] text-zinc-950 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]"
+                  : "bg-[#eae9df] text-zinc-800 border-zinc-900/30 hover:border-zinc-900 hover:bg-white"
               }`}
             >
               {item.label}
@@ -237,10 +285,10 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
           ))}
           <button
             onClick={() => {
-              setMobileMenuOpen(false);
+              closeMobileMenu();
               onOpenContact();
             }}
-            className="mt-2 w-full flex items-center justify-center gap-2 bg-[#f8b4a6] text-zinc-950 border-2 border-zinc-900 rounded-lg py-2.5 font-bold text-sm shadow-[2px_2px_0px_#1e1e1e]"
+            className="mobile-nav-item mt-1 w-full flex items-center justify-center gap-2 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-xl py-3 font-bold text-sm shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
           >
             <span>Let&apos;s Build</span>
             <ArrowRight className="w-4 h-4" />
