@@ -22,6 +22,8 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const isInitialMount = useRef(true);
+  const isManualScrollRef = useRef(false);
+  const manualScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const toggleMobileMenu = () => {
     if (!mobileMenuOpen) {
@@ -66,28 +68,100 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
     }
   }, [isMenuRendered]);
 
-  // Scroll spy to detect active section
+  // Clean #home from URL on initial mount if present
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#home") {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
+
+  // Smooth scroll to target section and animate pill
+  const scrollToSection = (sectionId: string) => {
+    setActiveSection(sectionId);
+    setHoveredSection(null);
+
+    // Suppress scroll spy updates while smooth scrolling so the pill glides smoothly without jumping
+    isManualScrollRef.current = true;
+    if (manualScrollTimeoutRef.current) {
+      clearTimeout(manualScrollTimeoutRef.current);
+    }
+    manualScrollTimeoutRef.current = setTimeout(() => {
+      isManualScrollRef.current = false;
+    }, 850);
+
+    if (sectionId === "home") {
+      // Remove any hash from the URL so #home never appears
+      if (typeof window !== "undefined" && window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      return;
+    }
+
+    const targetEl = document.getElementById(sectionId);
+    if (targetEl) {
+      const headerOffset = 78;
+      const elementPosition = targetEl.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleNavClick = (e: React.MouseEvent, sectionId: string) => {
+    e.preventDefault();
+    scrollToSection(sectionId);
+  };
+
+  const handleMobileNavClick = (e: React.MouseEvent, sectionId: string) => {
+    e.preventDefault();
+    closeMobileMenu();
+    scrollToSection(sectionId);
+  };
+
+  // Scroll spy to detect active section when scrolling naturally
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "services", "projects", "technologies", "about", "contact"];
-      const scrollY = window.scrollY;
+      if (isManualScrollRef.current) return;
 
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop - 140;
-          const height = el.offsetHeight;
-          if (scrollY >= top && scrollY < top + height) {
-            setActiveSection(section);
-            break;
-          }
+      // Bottom of page detection (Contact section)
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 70) {
+        setActiveSection("contact");
+        return;
+      }
+
+      // Top of page detection (Home section)
+      if (window.scrollY < 80) {
+        setActiveSection("home");
+        return;
+      }
+
+      const sections = ["home", "services", "projects", "technologies", "about", "contact"];
+      const scrollPosition = window.scrollY + 180;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el && el.offsetTop <= scrollPosition) {
+          setActiveSection(sections[i]);
+          break;
         }
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (manualScrollTimeoutRef.current) {
+        clearTimeout(manualScrollTimeoutRef.current);
+      }
+    };
   }, []);
 
   // GSAP ultra-smooth sliding pill animation
@@ -125,8 +199,8 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
         width,
         height,
         opacity: 1,
-        duration: 0.38,
-        ease: "power3.out",
+        duration: 0.35,
+        ease: "power2.out",
         overwrite: "auto",
       });
     }
@@ -158,7 +232,7 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
   }, [activeSection, hoveredSection]);
 
   const navItems = [
-    { label: "Home", id: "home", href: "#home" },
+    { label: "Home", id: "home", href: "/" },
     { label: "Services", id: "services", href: "#services" },
     { label: "Projects", id: "projects", href: "#projects" },
     { label: "Technologies", id: "technologies", href: "#technologies" },
@@ -170,7 +244,11 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
     <header className="sticky top-0 z-40 w-full py-4 px-4 sm:px-8 bg-[#f5f4ed]/95 backdrop-blur-md border-b border-zinc-300/80">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand Logo - Aniket Singh */}
-        <Link href="#home" className="flex items-center gap-2.5 group">
+        <Link
+          href="/"
+          onClick={(e) => handleNavClick(e, "home")}
+          className="flex items-center gap-2.5 group cursor-pointer"
+        >
           <div className="relative w-9 h-9 sm:w-10 sm:h-10 overflow-hidden rounded-xl border-1.5 border-zinc-900 bg-[#def7ec] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1e1e1e] group-hover:scale-105 transition-transform flex-shrink-0">
             <Image
               src="/images/aniket-portrait.jpg"
@@ -204,7 +282,7 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
           {/* Animated Sliding Pill Indicator */}
           <div
             ref={pillRef}
-            className="absolute top-1 left-0 rounded-full bg-[#c3e3c3] border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] pointer-events-none z-0 opacity-0 will-change-transform"
+            className="absolute top-0 left-0 rounded-full bg-[#c3e3c3] border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] pointer-events-none z-0 opacity-0 will-change-transform"
           />
 
           {navItems.map((item) => {
@@ -217,11 +295,8 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
                 }}
                 href={item.href}
                 onMouseEnter={() => setHoveredSection(item.id)}
-                onClick={() => {
-                  setActiveSection(item.id);
-                  setHoveredSection(null);
-                }}
-                className={`relative z-10 text-xs lg:text-sm font-semibold px-3.5 py-1.5 rounded-full transition-colors duration-200 select-none ${
+                onClick={(e) => handleNavClick(e, item.id)}
+                className={`relative z-10 text-xs lg:text-sm font-semibold px-3.5 py-1.5 rounded-full transition-colors duration-200 select-none cursor-pointer ${
                   isTarget
                     ? "text-zinc-950 font-bold"
                     : "text-zinc-700 hover:text-zinc-950"
@@ -275,7 +350,7 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
             <a
               key={item.id}
               href={item.href}
-              onClick={() => closeMobileMenu()}
+              onClick={(e) => handleMobileNavClick(e, item.id)}
               className={`mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 transition-all cursor-pointer ${
                 activeSection === item.id
                   ? "bg-[#c3e3c3] text-zinc-950 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]"

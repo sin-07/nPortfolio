@@ -5,13 +5,23 @@ import Link from "next/link";
 
 export default function Footer() {
   const footerLinks = [
-    { label: "Home", href: "#home" },
+    { label: "Home", href: "/" },
     { label: "Services", href: "#services" },
     { label: "Projects", href: "#projects" },
     { label: "Technologies", href: "#technologies" },
     { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" },
   ];
+
+  const handleFooterLinkClick = (e: React.MouseEvent, href: string) => {
+    if (href === "/" || href === "#home") {
+      e.preventDefault();
+      if (typeof window !== "undefined" && window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   return (
     <footer className="w-full bg-[#f5f4ed] text-zinc-700 py-8 px-4 sm:px-8 border-t border-zinc-300/80">
@@ -28,7 +38,8 @@ export default function Footer() {
             <Link
               key={idx}
               href={item.href}
-              className="text-zinc-600 hover:text-zinc-950 font-medium transition-colors"
+              onClick={(e) => handleFooterLinkClick(e, item.href)}
+              className="text-zinc-600 hover:text-zinc-950 font-medium transition-colors cursor-pointer"
             >
               {item.label}
             </Link>

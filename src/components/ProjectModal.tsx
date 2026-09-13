@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-import { X, ArrowRight } from "lucide-react";
+import { X, ArrowRight, ExternalLink } from "lucide-react";
 import gsap from "gsap";
 import { Project } from "./Projects";
 
@@ -154,7 +154,7 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
               </button>
 
               <a
-                href="https://github.com/sin-07"
+                href={project.githubUrl || "https://github.com/sin-07"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 bg-white text-zinc-950 hover:bg-zinc-100 border-2 border-zinc-900 rounded-xl px-4 py-2.5 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] neo-btn cursor-pointer"
@@ -164,6 +164,18 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
                 </svg>
                 <span>View on GitHub</span>
               </a>
+
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 bg-[#d4f7db] hover:bg-[#bcf3c7] text-emerald-950 border-2 border-zinc-900 rounded-xl px-4 py-2.5 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] neo-btn cursor-pointer"
+                >
+                  <ExternalLink className="w-4 h-4 text-emerald-800" />
+                  <span>Live Demo</span>
+                </a>
+              )}
             </div>
 
             <button

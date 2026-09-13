@@ -45,11 +45,11 @@ export default function Home() {
         {/* Services Section ("What We Do") */}
         <Services onSelectService={(srv) => handleOpenContact(srv)} />
 
-        {/* Technologies Section ("Tools We Love") */}
-        <Technologies />
-
         {/* Featured Projects Section ("See Our Work") */}
         <Projects onSelectProject={(project) => setActiveProject(project)} />
+
+        {/* Technologies Section ("Tools We Love") */}
+        <Technologies />
 
         {/* About Section (Aniket Singh - Software Engineer @ TCS) */}
         <AboutSection />

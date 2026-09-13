@@ -7,6 +7,11 @@
   --card-bg: #ffffff;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 85px;
+}
+
 body {
   background-color: #f5f4ed !important;
   color: #18181b !important;
@@ -83,4 +88,13 @@ body {
   background: #d4d1c4;
   border-radius: 4px;
   border: 1px solid #1e1e1e;
+}
+
+/* Hide scrollbars on touch carousel containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
