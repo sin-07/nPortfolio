@@ -109,16 +109,16 @@ export default function AboutSection() {
         className="mb-10 bg-[#FAF8F3] rounded-2xl border-2.5 border-zinc-900 shadow-[5px_5px_0px_#1e1e1e] overflow-hidden"
       >
         {/* Terminal Title Bar */}
-        <div className="bg-[#edeae1] border-b-2 border-zinc-900 px-4 py-2.5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-rose-400 border border-zinc-900"></span>
-            <span className="w-3 h-3 rounded-full bg-amber-400 border border-zinc-900"></span>
-            <span className="w-3 h-3 rounded-full bg-emerald-400 border border-zinc-900"></span>
-            <span className="ml-2 font-mono text-xs font-bold text-zinc-800">
+        <div className="bg-[#edeae1] border-b-2 border-zinc-900 px-3.5 sm:px-4 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-3 h-3 rounded-full bg-rose-400 border border-zinc-900 flex-shrink-0"></span>
+            <span className="w-3 h-3 rounded-full bg-amber-400 border border-zinc-900 flex-shrink-0"></span>
+            <span className="w-3 h-3 rounded-full bg-emerald-400 border border-zinc-900 flex-shrink-0"></span>
+            <span className="ml-1.5 sm:ml-2 font-mono text-[11px] sm:text-xs font-bold text-zinc-800 truncate max-w-[170px] xs:max-w-none">
               aniket@tcs: ~/profile/manifesto.ts
             </span>
           </div>
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
             <span className="font-mono text-[10px] uppercase font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded">
               Status: Software Engineer @ TCS
             </span>
@@ -126,7 +126,7 @@ export default function AboutSection() {
         </div>
 
         {/* Terminal Content */}
-        <div className="p-6 sm:p-8">
+        <div className="p-4 sm:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Col: Text & Manifesto */}
             <div className="lg:col-span-8 space-y-6">
@@ -220,7 +220,7 @@ export default function AboutSection() {
         {/* Education Card - Animates from LEFT */}
         <div
           ref={cardLeftRef}
-          className="bg-[#def7ec] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
+          className="bg-[#def7ec] p-5 sm:p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
         >
           <div>
             <div className="w-11 h-11 rounded-xl bg-white border border-zinc-900 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_#1e1e1e]">
@@ -250,7 +250,7 @@ export default function AboutSection() {
         {/* Technical Craft Card - Animates from BOTTOM */}
         <div
           ref={cardCenterRef}
-          className="bg-[#dff1fa] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
+          className="bg-[#dff1fa] p-5 sm:p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
         >
           <div>
             <div className="w-11 h-11 rounded-xl bg-white border border-zinc-900 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_#1e1e1e]">
@@ -280,7 +280,7 @@ export default function AboutSection() {
         {/* Vision & Product Impact - Animates from RIGHT */}
         <div
           ref={cardRightRef}
-          className="bg-[#fdece4] p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
+          className="bg-[#fdece4] p-5 sm:p-6 rounded-2xl border-2 border-zinc-900 shadow-[3.5px_3.5px_0px_#1e1e1e] flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_#1e1e1e] transition-all"
         >
           <div>
             <div className="w-11 h-11 rounded-xl bg-white border border-zinc-900 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_#1e1e1e]">

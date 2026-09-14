@@ -347,9 +347,9 @@ export default function Technologies() {
           </h2>
         </div>
 
-        <div className="flex items-center gap-5 self-start md:self-auto">
-          {/* Handwritten slogan + cute cloud */}
-          <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3 sm:gap-5 self-start md:self-auto">
+          {/* Handwritten slogan + cute cloud (hidden on small mobile to keep header clean and uncrowded) */}
+          <div className="hidden sm:flex items-center gap-2">
             <div className="font-handwriting text-zinc-600 text-lg leading-tight text-right">
               <span>A flexible stack.</span><br />
               <span className="font-bold text-zinc-900">For real-world problems.</span>
@@ -370,7 +370,7 @@ export default function Technologies() {
           {/* View All Toggle Button */}
           <button
             onClick={() => setShowFullStack(!showFullStack)}
-            className="inline-flex items-center gap-1.5 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-xl px-4 py-2 font-bold text-xs sm:text-sm shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-xl px-3.5 sm:px-4 py-2 font-bold text-xs sm:text-sm shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
           >
             <span>{showFullStack ? "Hide Stack" : "View All Stack"}</span>
             <ChevronDown
@@ -385,17 +385,17 @@ export default function Technologies() {
       {/* Row 1 Grid - Sweeps in from LEFT */}
       <div
         ref={row1Ref}
-        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-3 mb-3"
+        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2.5 sm:gap-3 mb-2.5 sm:mb-3"
       >
         {row1.map((item, idx) => (
           <div
             key={idx}
-            className="bg-white border-2 border-zinc-900 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1e1e1e] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] hover:shadow-[3.5px_3.5px_0px_#1e1e1e] transition-all cursor-pointer group"
+            className="bg-white border-2 border-zinc-900 rounded-xl p-2 sm:p-3 flex flex-col items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1e1e1e] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] hover:shadow-[3.5px_3.5px_0px_#1e1e1e] transition-all cursor-pointer group min-w-0"
           >
-            <div className="w-7 h-7 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center group-hover:scale-110 transition-transform">
               {item.icon}
             </div>
-            <span className="text-[11px] font-bold text-zinc-900 tracking-tight">
+            <span className="text-[10px] sm:text-[11px] font-bold text-zinc-900 tracking-tight truncate max-w-full">
               {item.name}
             </span>
           </div>
@@ -405,17 +405,17 @@ export default function Technologies() {
       {/* Row 2 Grid - Sweeps in from RIGHT */}
       <div
         ref={row2Ref}
-        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-13 gap-3"
+        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-13 gap-2.5 sm:gap-3"
       >
         {row2.map((item, idx) => (
           <div
             key={idx}
-            className="bg-white border-2 border-zinc-900 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1e1e1e] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] hover:shadow-[3.5px_3.5px_0px_#1e1e1e] transition-all cursor-pointer group"
+            className="bg-white border-2 border-zinc-900 rounded-xl p-2 sm:p-3 flex flex-col items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1e1e1e] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] hover:shadow-[3.5px_3.5px_0px_#1e1e1e] transition-all cursor-pointer group min-w-0"
           >
-            <div className="w-7 h-7 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center group-hover:scale-110 transition-transform">
               {item.icon}
             </div>
-            <span className="text-[11px] font-bold text-zinc-900 tracking-tight">
+            <span className="text-[10px] sm:text-[11px] font-bold text-zinc-900 tracking-tight truncate max-w-full">
               {item.name}
             </span>
           </div>

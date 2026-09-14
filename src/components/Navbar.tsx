@@ -241,15 +241,15 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full py-4 px-4 sm:px-8 bg-[#f5f4ed]/95 backdrop-blur-md border-b border-zinc-300/80">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full py-3 sm:py-4 px-3.5 sm:px-8 bg-[#f5f4ed]/95 backdrop-blur-md border-b border-zinc-300/80">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
         {/* Brand Logo - Aniket Singh */}
         <Link
           href="/"
           onClick={(e) => handleNavClick(e, "home")}
-          className="flex items-center gap-2.5 group cursor-pointer"
+          className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer min-w-0"
         >
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 overflow-hidden rounded-xl border-1.5 border-zinc-900 bg-[#def7ec] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1e1e1e] group-hover:scale-105 transition-transform flex-shrink-0">
+          <div className="relative w-8 h-8 sm:w-10 sm:h-10 overflow-hidden rounded-xl border-1.5 border-zinc-900 bg-[#def7ec] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1e1e1e] group-hover:scale-105 transition-transform flex-shrink-0">
             <Image
               src="/images/aniket-portrait.jpg"
               alt="Aniket Singh - Software Engineer @ TCS"
@@ -258,16 +258,16 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
               className="object-cover"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-base sm:text-lg tracking-tight text-zinc-950 font-sans leading-tight">
+              <span className="font-extrabold text-sm sm:text-lg tracking-tight text-zinc-950 font-sans leading-tight truncate">
                 Aniket Singh
               </span>
-              <span className="text-[10px] font-pixel text-emerald-700 bg-emerald-100 border border-emerald-300 px-1.5 py-0.2 rounded">
+              <span className="text-[9px] sm:text-[10px] font-pixel text-emerald-700 bg-emerald-100 border border-emerald-300 px-1.5 py-0.2 rounded flex-shrink-0">
                 ByteBloom
               </span>
             </div>
-            <span className="text-[10px] sm:text-xs text-zinc-600 font-medium tracking-wide">
+            <span className="text-[9px] sm:text-xs text-zinc-600 font-medium tracking-wide truncate max-w-[130px] xs:max-w-[210px] sm:max-w-none">
               Software Engineer @ TCS • Full Stack Developer
             </span>
           </div>
@@ -309,7 +309,7 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
         </nav>
 
         {/* Right Actions: Retro status badge + Let's Build CTA */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5">
+        <div className="flex items-center gap-2 sm:gap-3.5 flex-shrink-0">
           {/* Status badge */}
           <div className="hidden lg:flex items-center gap-1.5 bg-[#eae9df] border-1.5 border-zinc-900 rounded-full px-3 py-1 text-xs font-semibold text-zinc-800 shadow-[1px_1px_0px_#1e1e1e]">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -319,16 +319,16 @@ export default function Navbar({ onOpenContact, onOpenAbout }: NavbarProps) {
           {/* Let's Build Button */}
           <button
             onClick={onOpenContact}
-            className="inline-flex items-center gap-1.5 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-lg sm:rounded-xl px-4 py-2 font-bold text-xs sm:text-sm shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
+            className="hidden xs:inline-flex items-center gap-1.5 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-lg sm:rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] sm:shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
           >
             <span>Let&apos;s Build</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
 
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden p-2 rounded-lg border-2 border-zinc-900 bg-[#eae9df] shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
+            className="md:hidden p-1.5 sm:p-2 rounded-lg border-2 border-zinc-900 bg-[#eae9df] shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
             aria-label="Toggle Mobile Menu"
           >
             {mobileMenuOpen ? (
