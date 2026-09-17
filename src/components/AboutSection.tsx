@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-import { GraduationCap, Code2, Sparkles, BookOpen, MapPin, Award, Terminal, Cpu, Layers } from "lucide-react";
+import { GraduationCap, Code2, Sparkles, BookOpen, MapPin, Award, Terminal, Cpu, Layers, Briefcase } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,7 +10,11 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function AboutSection() {
+interface AboutSectionProps {
+  onOpenJourney?: () => void;
+}
+
+export default function AboutSection({ onOpenJourney }: AboutSectionProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cardLeftRef = useRef<HTMLDivElement>(null);
@@ -173,6 +177,16 @@ export default function AboutSection() {
                   <Sparkles className="w-3.5 h-3.5 text-purple-700" />
                   Captivating Visuals &amp; Narratives
                 </span>
+
+                {onOpenJourney && (
+                  <button
+                    onClick={onOpenJourney}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#c3e3c3] hover:bg-[#aee0ae] text-zinc-950 border-1.5 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e] cursor-pointer neo-btn transition-all ml-auto"
+                  >
+                    <Briefcase className="w-3.5 h-3.5 text-zinc-900" />
+                    <span>View Career Milestones (TCS &amp; B.Tech) &rarr;</span>
+                  </button>
+                )}
               </div>
             </div>
 
