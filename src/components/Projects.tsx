@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, ChevronDown, Check } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, ChevronDown, Check, Search, X } from "lucide-react";
+import { playClickSound } from "@/utils/audio";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -81,6 +82,8 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     return () => ctx.revert();
   }, []);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   const projects: Project[] = [
     {
       id: "3d-printing-website",
@@ -118,6 +121,42 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
       githubUrl: "https://github.com/sin-07/AI-Powered-Skill",
     },
     {
+      id: "cricketwala-playarena",
+      title: "CricketWala PlayArena",
+      category: "Gaming",
+      image: "/images/hero-desk.jpg",
+      tags: ["React", "JavaScript", "Game Loop", "Tailwind"],
+      description:
+        "Real-time interactive cricket sports gaming platform with high-FPS browser mechanics, dynamic physics simulation, and competitive multiplayer modes.",
+      metrics: "Real-time Game Loop & Physics",
+      githubUrl: "https://github.com/sin-07/CricketWalaPlayArena",
+      liveUrl: "https://cricketwalaplayarena.in",
+    },
+    {
+      id: "raven-tutorials",
+      title: "Raven Tutorials",
+      category: "EdTech",
+      image: "/images/project-real-estate.jpg",
+      tags: ["Next.js", "TypeScript", "Tailwind CSS", "EdTech"],
+      description:
+        "Comprehensive learning management platform offering structured course curriculum, interactive study notes, and learner progress tracking.",
+      metrics: "Modular E-Learning Architecture",
+      githubUrl: "https://github.com/sin-07/Raven-Tutorials",
+      liveUrl: "https://raventutorials.in",
+    },
+    {
+      id: "samastipur-blood-bank",
+      title: "Samastipur Blood Bank",
+      category: "Social Good",
+      image: "/images/project-erp.jpg",
+      tags: ["React", "Node.js", "MongoDB", "Healthcare"],
+      description:
+        "Life-saving community platform connecting voluntary donors with patients and regional hospitals in need with real-time blood inventory tracking.",
+      metrics: "Healthcare Impact & Inventory",
+      githubUrl: "https://github.com/sin-07/Blood-Bank",
+      liveUrl: "https://samastipurbloodbank.com",
+    },
+    {
       id: "powershell-rust",
       title: "AASM Shell",
       category: "Systems",
@@ -130,14 +169,19 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     },
   ];
 
-  const filteredProjects =
-    selectedCategory === "All"
-      ? projects
-      : projects.filter(
-          (p) =>
-            p.category === selectedCategory ||
-            p.tags.some((t) => t.toLowerCase().includes(selectedCategory.toLowerCase()))
-        );
+  const filteredProjects = projects.filter((p) => {
+    const matchesCat =
+      selectedCategory === "All" ||
+      p.category === selectedCategory ||
+      p.tags.some((t) => t.toLowerCase().includes(selectedCategory.toLowerCase()));
+    const q = searchQuery.trim().toLowerCase();
+    const matchesQuery =
+      !q ||
+      p.title.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      p.tags.some((t) => t.toLowerCase().includes(q));
+    return matchesCat && matchesQuery;
+  });
 
   const scrollToIndex = (index: number) => {
     setCurrentIndex(index);
@@ -225,59 +269,95 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
         </div>
       </div>
 
-      {/* GSAP Animated Category Dropdown Filter Bar */}
+      {/* GSAP Animated Category Dropdown & Search Filter Bar */}
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2.5">
-        <div className="relative inline-block text-left">
-          <button
-            type="button"
-            onClick={() => setFilterOpen(!filterOpen)}
-            className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#FAF8F3] hover:bg-white text-zinc-900 border-2 border-zinc-900 rounded-xl px-3 py-1.5 sm:px-3.5 sm:py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
-          >
-            <span className="text-zinc-500 font-mono text-[11px] sm:text-xs">Category:</span>
-            <span className="text-emerald-950 truncate max-w-[120px] sm:max-w-none font-extrabold">
-              {selectedCategory === "All" ? "All Projects" : selectedCategory}
-            </span>
-            <ChevronDown
-              className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-800 transition-transform duration-200 ${
-                filterOpen ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-
-          {filterOpen && (
-            <div
-              ref={filterMenuRef}
-              className="absolute left-0 mt-2 w-52 sm:w-56 rounded-xl bg-[#FAF8F3] border-2 border-zinc-900 shadow-[4px_4px_0px_#1e1e1e] p-1.5 z-30 space-y-1 will-change-transform"
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Category dropdown */}
+          <div className="relative inline-block text-left">
+            <button
+              type="button"
+              onClick={() => {
+                playClickSound();
+                setFilterOpen(!filterOpen);
+              }}
+              className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#FAF8F3] hover:bg-white text-zinc-900 border-2 border-zinc-900 rounded-xl px-3 py-1.5 sm:px-3.5 sm:py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
             >
-              {[
-                { label: "All Real-World Projects", id: "All" },
-                { label: "3D & WebGL", id: "3D Web" },
-                { label: "E-Commerce & Mobile", id: "E-Commerce" },
-                { label: "AI & Career Intelligence", id: "AI" },
-                { label: "Systems & Rust CLI", id: "Systems" },
-              ].map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => {
-                    setSelectedCategory(cat.id);
-                    setFilterOpen(false);
-                    setCurrentIndex(0);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
-                    selectedCategory === cat.id
-                      ? "bg-[#c3e3c3] text-zinc-950 font-extrabold"
-                      : "hover:bg-zinc-200/60 text-zinc-800"
-                  }`}
-                >
-                  <span>{cat.label}</span>
-                  {selectedCategory === cat.id && (
-                    <Check className="w-3.5 h-3.5 text-emerald-700" />
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
+              <span className="text-zinc-500 font-mono text-[11px] sm:text-xs">Category:</span>
+              <span className="text-emerald-950 truncate max-w-[120px] sm:max-w-none font-extrabold">
+                {selectedCategory === "All" ? "All Categories" : selectedCategory}
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-800 transition-transform duration-200 ${
+                  filterOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {filterOpen && (
+              <div
+                ref={filterMenuRef}
+                className="absolute left-0 mt-2 w-56 sm:w-60 rounded-xl bg-[#FAF8F3] border-2 border-zinc-900 shadow-[4px_4px_0px_#1e1e1e] p-1.5 z-30 space-y-1 will-change-transform"
+              >
+                {[
+                  { label: "All Real-World Projects", id: "All" },
+                  { label: "3D & WebGL (Atelier)", id: "3D Web" },
+                  { label: "E-Commerce & Mobile", id: "E-Commerce" },
+                  { label: "AI & Career Intelligence", id: "AI" },
+                  { label: "Gaming & Game Loops", id: "Gaming" },
+                  { label: "EdTech & LMS", id: "EdTech" },
+                  { label: "Social Good & Healthcare", id: "Social Good" },
+                  { label: "Systems & Rust CLI", id: "Systems" },
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => {
+                      playClickSound();
+                      setSelectedCategory(cat.id);
+                      setFilterOpen(false);
+                      setCurrentIndex(0);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                      selectedCategory === cat.id
+                        ? "bg-[#c3e3c3] text-zinc-950 font-extrabold"
+                        : "hover:bg-zinc-200/60 text-zinc-800"
+                    }`}
+                  >
+                    <span>{cat.label}</span>
+                    {selectedCategory === cat.id && (
+                      <Check className="w-3.5 h-3.5 text-emerald-700" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Real-time Search Input */}
+          <div className="relative flex items-center">
+            <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentIndex(0);
+              }}
+              placeholder="Filter by keyword..."
+              className="bg-white border-2 border-zinc-900 rounded-xl pl-8 pr-7 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-zinc-950 placeholder-zinc-400 focus:outline-none shadow-[2px_2px_0px_#1e1e1e] w-40 sm:w-56"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  playClickSound();
+                  setSearchQuery("");
+                }}
+                className="absolute right-2 p-0.5 rounded text-zinc-400 hover:text-zinc-800"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
 
         <span className="text-[11px] sm:text-xs font-mono font-semibold text-zinc-600 bg-white/80 border border-zinc-400 px-2.5 py-1 rounded-md shadow-[1px_1px_0px_#1e1e1e]">
@@ -316,7 +396,10 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
               ref={(el) => {
                 cardRefs.current[idx] = el;
               }}
-              onClick={() => onSelectProject(proj)}
+              onClick={() => {
+                playClickSound();
+                onSelectProject(proj);
+              }}
               className={`w-[84vw] max-w-[315px] sm:w-auto sm:max-w-none flex-shrink-0 snap-center bg-[#FAF8F3] border-2 border-zinc-900 ${
                 currentIndex === idx
                   ? "shadow-[4px_4px_0px_#1e1e1e]"

@@ -13,6 +13,7 @@ import ContactModal from "@/components/ContactModal";
 import ProjectModal from "@/components/ProjectModal";
 import CommandPalette from "@/components/CommandPalette";
 import CareerJourneyModal from "@/components/CareerJourneyModal";
+import ResumeModal from "@/components/ResumeModal";
 import Toast from "@/components/Toast";
 import { Command, Search } from "lucide-react";
 
@@ -24,6 +25,7 @@ export default function Home() {
   // New features state
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [journeyModalOpen, setJourneyModalOpen] = useState(false);
+  const [resumeModalOpen, setResumeModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Global Ctrl+K / Cmd+K listener
@@ -67,12 +69,16 @@ export default function Home() {
         }}
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
         onOpenJourney={() => setJourneyModalOpen(true)}
+        onOpenResume={() => setResumeModalOpen(true)}
       />
 
       {/* Main Content Sections */}
       <main className="flex-1 w-full bg-[#f5f4ed]">
         {/* Hero Section */}
-        <Hero onOpenContact={() => handleOpenContact()} />
+        <Hero
+          onOpenContact={() => handleOpenContact()}
+          onOpenResume={() => setResumeModalOpen(true)}
+        />
 
         {/* Services Section ("What We Do") */}
         <Services onSelectService={(srv) => handleOpenContact(srv)} />
@@ -129,6 +135,7 @@ export default function Home() {
         onClose={() => setCommandPaletteOpen(false)}
         onOpenContact={(service) => handleOpenContact(service)}
         onOpenJourney={() => setJourneyModalOpen(true)}
+        onOpenResume={() => setResumeModalOpen(true)}
         onCopyEmail={handleCopyEmail}
       />
 
@@ -136,6 +143,13 @@ export default function Home() {
       <CareerJourneyModal
         isOpen={journeyModalOpen}
         onClose={() => setJourneyModalOpen(false)}
+        onOpenContact={() => handleOpenContact("Enterprise / Career Opportunity")}
+      />
+
+      {/* Printable Curriculum Vitae (Resume / CV) Modal */}
+      <ResumeModal
+        isOpen={resumeModalOpen}
+        onClose={() => setResumeModalOpen(false)}
         onOpenContact={() => handleOpenContact("Enterprise / Career Opportunity")}
       />
 

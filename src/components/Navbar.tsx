@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Menu, X, Search, Briefcase } from "lucide-react";
+import { ArrowRight, Menu, X, Search, Briefcase, FileText, Volume2, VolumeX } from "lucide-react";
+import { playClickSound, isSoundMuted, setSoundMuted } from "@/utils/audio";
 import gsap from "gsap";
 
 interface NavbarProps {
@@ -11,6 +12,7 @@ interface NavbarProps {
   onOpenAbout: () => void;
   onOpenCommandPalette?: () => void;
   onOpenJourney?: () => void;
+  onOpenResume?: () => void;
 }
 
 export default function Navbar({
@@ -18,11 +20,26 @@ export default function Navbar({
   onOpenAbout,
   onOpenCommandPalette,
   onOpenJourney,
+  onOpenResume,
 }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home");
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMenuRendered, setIsMenuRendered] = useState(false);
+  const [soundMuted, setSoundMutedState] = useState(false);
+
+  useEffect(() => {
+    setSoundMutedState(isSoundMuted());
+  }, []);
+
+  const toggleSound = () => {
+    const next = !soundMuted;
+    setSoundMuted(next);
+    setSoundMutedState(next);
+    if (!next) {
+      playClickSound();
+    }
+  };
 
   const navRef = useRef<HTMLElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
@@ -315,11 +332,28 @@ export default function Navbar({
           })}
         </nav>
 
-        {/* Right Actions: Search / Ctrl+K + Status badge + Let's Build CTA */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        {/* Right Actions: Sound Toggle + Search / Ctrl+K + CV + Status badge + Let's Build CTA */}
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
+          {/* Sound FX Audio Toggle */}
+          <button
+            onClick={toggleSound}
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-[#eae9df] hover:bg-white border-1.5 border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] text-zinc-700 hover:text-zinc-950 transition-all cursor-pointer"
+            title={soundMuted ? "Unmute Sound FX" : "Mute Sound FX"}
+            aria-label="Toggle Sound Effects"
+          >
+            {soundMuted ? (
+              <VolumeX className="w-3.5 h-3.5 text-zinc-400" />
+            ) : (
+              <Volume2 className="w-3.5 h-3.5 text-emerald-700" />
+            )}
+          </button>
+
           {/* Quick Search / Command Palette Trigger */}
           <button
-            onClick={onOpenCommandPalette}
+            onClick={() => {
+              playClickSound();
+              if (onOpenCommandPalette) onOpenCommandPalette();
+            }}
             className="flex items-center gap-1.5 bg-[#eae9df] hover:bg-[#def7ec] border-1.5 border-zinc-900 rounded-full px-2.5 sm:px-3 py-1 text-xs font-semibold text-zinc-800 shadow-[1px_1px_0px_#1e1e1e] hover:shadow-[2px_2px_0px_#1e1e1e] transition-all cursor-pointer"
             title="Quick Actions & Search (Ctrl+K)"
           >
@@ -329,10 +363,28 @@ export default function Navbar({
             </span>
           </button>
 
+          {/* Resume / CV Button */}
+          {onOpenResume && (
+            <button
+              onClick={() => {
+                playClickSound();
+                onOpenResume();
+              }}
+              className="hidden lg:inline-flex items-center gap-1.5 bg-[#FAF8F3] hover:bg-[#c3e3c3] text-zinc-950 border-1.5 border-zinc-900 rounded-full px-3 py-1 text-xs font-bold shadow-[1px_1px_0px_#1e1e1e] transition-all cursor-pointer"
+              title="View Curriculum Vitae / Resume"
+            >
+              <FileText className="w-3.5 h-3.5 text-emerald-900" />
+              <span>Resume</span>
+            </button>
+          )}
+
           {/* Status badge - click opens Career Journey Modal */}
           <button
-            onClick={onOpenJourney}
-            className="hidden lg:flex items-center gap-1.5 bg-[#eae9df] hover:bg-[#def7ec] border-1.5 border-zinc-900 rounded-full px-3 py-1 text-xs font-semibold text-zinc-800 shadow-[1px_1px_0px_#1e1e1e] transition-colors cursor-pointer"
+            onClick={() => {
+              playClickSound();
+              if (onOpenJourney) onOpenJourney();
+            }}
+            className="hidden xl:flex items-center gap-1.5 bg-[#eae9df] hover:bg-[#def7ec] border-1.5 border-zinc-900 rounded-full px-3 py-1 text-xs font-semibold text-zinc-800 shadow-[1px_1px_0px_#1e1e1e] transition-colors cursor-pointer"
             title="Click to view Career Journey & Milestones"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -341,7 +393,10 @@ export default function Navbar({
 
           {/* Let's Build Button */}
           <button
-            onClick={onOpenContact}
+            onClick={() => {
+              playClickSound();
+              onOpenContact();
+            }}
             className="hidden xs:inline-flex items-center gap-1.5 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-lg sm:rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] sm:shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
           >
             <span>Let&apos;s Build</span>
@@ -350,7 +405,10 @@ export default function Navbar({
 
           {/* Mobile Menu Button */}
           <button
-            onClick={toggleMobileMenu}
+            onClick={() => {
+              playClickSound();
+              toggleMobileMenu();
+            }}
             className="md:hidden p-1.5 sm:p-2 rounded-lg border-2 border-zinc-900 bg-[#eae9df] shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
             aria-label="Toggle Mobile Menu"
           >
@@ -373,7 +431,10 @@ export default function Navbar({
             <a
               key={item.id}
               href={item.href}
-              onClick={(e) => handleMobileNavClick(e, item.id)}
+              onClick={(e) => {
+                playClickSound();
+                handleMobileNavClick(e, item.id);
+              }}
               className={`mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 transition-all cursor-pointer ${
                 activeSection === item.id
                   ? "bg-[#c3e3c3] text-zinc-950 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]"
@@ -387,6 +448,7 @@ export default function Navbar({
           {/* Mobile Command Palette shortcut */}
           <button
             onClick={() => {
+              playClickSound();
               closeMobileMenu();
               if (onOpenCommandPalette) onOpenCommandPalette();
             }}
@@ -401,9 +463,25 @@ export default function Navbar({
             </span>
           </button>
 
+          {/* Mobile Resume link */}
+          {onOpenResume && (
+            <button
+              onClick={() => {
+                playClickSound();
+                closeMobileMenu();
+                onOpenResume();
+              }}
+              className="mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 bg-[#FAF8F3] text-zinc-900 border-zinc-900/40 hover:border-zinc-900 flex items-center gap-2 cursor-pointer"
+            >
+              <FileText className="w-4 h-4 text-emerald-800" />
+              <span>View Resume / CV</span>
+            </button>
+          )}
+
           {/* Mobile Journey link */}
           <button
             onClick={() => {
+              playClickSound();
               closeMobileMenu();
               if (onOpenJourney) onOpenJourney();
             }}
@@ -415,6 +493,7 @@ export default function Navbar({
 
           <button
             onClick={() => {
+              playClickSound();
               closeMobileMenu();
               onOpenContact();
             }}

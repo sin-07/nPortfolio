@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, Search, X } from "lucide-react";
+import { playClickSound } from "@/utils/audio";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -11,6 +12,8 @@ if (typeof window !== "undefined") {
 
 export default function Technologies() {
   const [showFullStack, setShowFullStack] = useState(false);
+  const [techSearch, setTechSearch] = useState("");
+  const [selectedTechCategory, setSelectedTechCategory] = useState("All");
   const sectionRef = useRef<HTMLElement>(null);
   const row1Ref = useRef<HTMLDivElement>(null);
   const row2Ref = useRef<HTMLDivElement>(null);
@@ -428,7 +431,7 @@ export default function Technologies() {
           ref={fullStackRef}
           className="mt-6 p-6 sm:p-8 bg-[#FAF8F3] border-2.5 border-zinc-900 rounded-2xl shadow-[5px_5px_0px_#1e1e1e] will-change-transform"
         >
-          <div className="flex items-center justify-between mb-5 border-b-2 border-zinc-900 pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 border-b-2 border-zinc-900 pb-3 gap-2">
             <div>
               <span className="text-[10px] font-mono uppercase font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded">
                 Categorized Toolkit
@@ -442,62 +445,144 @@ export default function Technologies() {
             </span>
           </div>
 
+          {/* Interactive Filter Pills & Search Input */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {[
+                { id: "All", label: "All Tech" },
+                { id: "Frontend", label: "Frontend" },
+                { id: "Backend", label: "Backend & APIs" },
+                { id: "Data", label: "Data & Storage" },
+                { id: "DevOps", label: "DevOps & Tools" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    playClickSound();
+                    setSelectedTechCategory(tab.id);
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                    selectedTechCategory === tab.id
+                      ? "bg-[#c3e3c3] text-zinc-950 border-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e]"
+                      : "bg-white text-zinc-700 border-zinc-300 hover:border-zinc-900"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative flex items-center">
+              <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 pointer-events-none" />
+              <input
+                type="text"
+                value={techSearch}
+                onChange={(e) => setTechSearch(e.target.value)}
+                placeholder="Search tools (e.g. Next, Docker)..."
+                className="bg-white border-2 border-zinc-900 rounded-xl pl-8 pr-7 py-1.5 text-xs font-semibold text-zinc-950 placeholder-zinc-400 focus:outline-none shadow-[2px_2px_0px_#1e1e1e] w-full sm:w-56"
+              />
+              {techSearch && (
+                <button
+                  onClick={() => {
+                    playClickSound();
+                    setTechSearch("");
+                  }}
+                  className="absolute right-2 text-zinc-400 hover:text-zinc-800"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Frontend */}
-            <div className="stack-category-card bg-[#def7ec] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
-              <span className="text-xs font-bold font-mono text-teal-900 block mb-2">
-                01. FRONTEND &amp; UI
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP", "Vue.js", "HTML5/CSS3"].map((t) => (
-                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
-                    {t}
-                  </span>
-                ))}
+            {(selectedTechCategory === "All" || selectedTechCategory === "Frontend") && (
+              <div className="stack-category-card bg-[#def7ec] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+                <span className="text-xs font-bold font-mono text-teal-900 block mb-2">
+                  01. FRONTEND &amp; UI
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP", "Vue.js", "HTML5/CSS3"]
+                    .filter((t) => !techSearch.trim() || t.toLowerCase().includes(techSearch.toLowerCase()))
+                    .map((t) => (
+                      <span
+                        key={t}
+                        onClick={() => playClickSound()}
+                        className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] cursor-default hover:bg-zinc-100 transition-colors"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Backend */}
-            <div className="stack-category-card bg-[#dff1fa] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
-              <span className="text-xs font-bold font-mono text-sky-900 block mb-2">
-                02. BACKEND &amp; APIS
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {["Node.js", "Express", "Python", "FastAPI", "C#", ".NET Core", "REST & GraphQL"].map((t) => (
-                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
-                    {t}
-                  </span>
-                ))}
+            {(selectedTechCategory === "All" || selectedTechCategory === "Backend") && (
+              <div className="stack-category-card bg-[#dff1fa] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+                <span className="text-xs font-bold font-mono text-sky-900 block mb-2">
+                  02. BACKEND &amp; APIS
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Node.js", "Express", "Python", "FastAPI", "C#", ".NET Core", "REST & GraphQL"]
+                    .filter((t) => !techSearch.trim() || t.toLowerCase().includes(techSearch.toLowerCase()))
+                    .map((t) => (
+                      <span
+                        key={t}
+                        onClick={() => playClickSound()}
+                        className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] cursor-default hover:bg-zinc-100 transition-colors"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Databases */}
-            <div className="stack-category-card bg-[#fdece4] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
-              <span className="text-xs font-bold font-mono text-amber-900 block mb-2">
-                03. DATA &amp; STORAGE
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {["PostgreSQL", "MongoDB", "Redis", "Supabase", "MySQL", "Prisma"].map((t) => (
-                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
-                    {t}
-                  </span>
-                ))}
+            {(selectedTechCategory === "All" || selectedTechCategory === "Data") && (
+              <div className="stack-category-card bg-[#fdece4] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+                <span className="text-xs font-bold font-mono text-amber-900 block mb-2">
+                  03. DATA &amp; STORAGE
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["PostgreSQL", "MongoDB", "Redis", "Supabase", "MySQL", "Prisma"]
+                    .filter((t) => !techSearch.trim() || t.toLowerCase().includes(techSearch.toLowerCase()))
+                    .map((t) => (
+                      <span
+                        key={t}
+                        onClick={() => playClickSound()}
+                        className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] cursor-default hover:bg-zinc-100 transition-colors"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Cloud & Tools */}
-            <div className="stack-category-card bg-[#f0ebfa] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
-              <span className="text-xs font-bold font-mono text-purple-900 block mb-2">
-                04. DEVOPS &amp; TOOLS
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {["Docker", "AWS", "Git/GitHub", "Vercel", "Linux", "Figma", "Postman"].map((t) => (
-                  <span key={t} className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900">
-                    {t}
-                  </span>
-                ))}
+            {(selectedTechCategory === "All" || selectedTechCategory === "DevOps") && (
+              <div className="stack-category-card bg-[#f0ebfa] p-4 rounded-xl border-2 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
+                <span className="text-xs font-bold font-mono text-purple-900 block mb-2">
+                  04. DEVOPS &amp; TOOLS
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Docker", "AWS", "Git/GitHub", "Vercel", "Linux", "Figma", "Postman"]
+                    .filter((t) => !techSearch.trim() || t.toLowerCase().includes(techSearch.toLowerCase()))
+                    .map((t) => (
+                      <span
+                        key={t}
+                        onClick={() => playClickSound()}
+                        className="px-2 py-0.5 text-xs font-bold bg-white text-zinc-900 rounded border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] cursor-default hover:bg-zinc-100 transition-colors"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

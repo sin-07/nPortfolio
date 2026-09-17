@@ -18,6 +18,7 @@ import {
   User,
   Wrench,
   Globe,
+  FileText,
 } from "lucide-react";
 import gsap from "gsap";
 
@@ -42,6 +43,7 @@ interface CommandPaletteProps {
   onClose: () => void;
   onOpenContact: (service?: string) => void;
   onOpenJourney: () => void;
+  onOpenResume?: () => void;
   onCopyEmail: (email: string) => void;
 }
 
@@ -59,6 +61,7 @@ export default function CommandPalette({
   onClose,
   onOpenContact,
   onOpenJourney,
+  onOpenResume,
   onCopyEmail,
 }: CommandPaletteProps) {
   const [mode, setMode] = useState<"search" | "terminal">("search");
@@ -198,6 +201,21 @@ export default function CommandPalette({
       },
       hint: "TCS & B.Tech",
     },
+    ...(onOpenResume
+      ? [
+          {
+            id: "act-resume",
+            label: "View Curriculum Vitae (Resume / CV)",
+            category: "Quick Actions" as const,
+            icon: FileText,
+            action: () => {
+              handleCloseWithAnimation();
+              onOpenResume();
+            },
+            hint: "Print / PDF",
+          },
+        ]
+      : []),
     {
       id: "act-contact-modal",
       label: "Open Project Inquiry & Contact Form",
@@ -258,7 +276,7 @@ export default function CommandPalette({
     switch (cmd) {
       case "help":
         response =
-          "Commands:\n • bio      - Background & summary\n • role     - Software Engineer @ TCS info\n • tech     - Core technical stack\n • projects - Major production apps\n • journey  - Opens Career Timeline modal\n • contact  - Opens Contact form\n • clear    - Clears terminal output\n • sudo hire-me - Easter egg";
+          "Commands:\n • bio      - Background & summary\n • role     - Software Engineer @ TCS info\n • tech     - Core technical stack\n • projects - Major production apps\n • resume   - Opens Curriculum Vitae (CV) modal\n • journey  - Opens Career Timeline modal\n • contact  - Opens Contact form\n • clear    - Clears terminal output\n • sudo hire-me - Easter egg";
         break;
       case "whoami":
       case "bio":
@@ -277,6 +295,15 @@ export default function CommandPalette({
       case "projects":
         response =
           "1. CricketWala PlayArena (Real-time cricket game engine)\n2. Raven Tutorials (Modular EdTech LMS)\n3. Samastipur Blood Bank (Healthcare donor platform)\n4. Modern Enterprise ERP & AI Logistics Hub";
+        break;
+      case "resume":
+      case "cv":
+        if (onOpenResume) {
+          handleCloseWithAnimation();
+          onOpenResume();
+          return;
+        }
+        response = "Resume modal is not available right now.";
         break;
       case "journey":
         handleCloseWithAnimation();
