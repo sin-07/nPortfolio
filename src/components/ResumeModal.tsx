@@ -1,84 +1,107 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import {
-  X,
-  Download,
-  Printer,
-  Briefcase,
-  GraduationCap,
-  Mail,
-  ExternalLink,
-  Code2,
-  CheckCircle2,
-  FileText,
-  MapPin,
-} from "lucide-react";
 import gsap from "gsap";
-import { playClickSound } from "@/utils/audio";
+import { portfolioData } from "@/data/portfolioData";
 
 interface ResumeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenContact: () => void;
 }
 
-export default function ResumeModal({
-  isOpen,
-  onClose,
-  onOpenContact,
-}: ResumeModalProps) {
-  const backdropRef = useRef<HTMLDivElement>(null);
+function CloseIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function PrintIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function DownloadIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function ExternalLinkIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+      <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+    </svg>
+  );
+}
+
+function GitHubIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path
+        fillRule="evenodd"
+        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function LinkedInIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+    </svg>
+  );
+}
+
+export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
+  const { profile, education, experience } = portfolioData;
+  const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    if (backdropRef.current) {
-      gsap.fromTo(
-        backdropRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.22, ease: "power2.out" }
-      );
-    }
-
-    if (modalRef.current) {
+    if (isOpen && overlayRef.current && modalRef.current) {
+      gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" });
       gsap.fromTo(
         modalRef.current,
-        { scale: 0.9, y: 20, opacity: 0 },
-        { scale: 1, y: 0, opacity: 1, duration: 0.32, ease: "back.out(1.2)" }
+        { scale: 0.85, opacity: 0, y: 30 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.5)" }
       );
     }
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleCloseWithAnimation();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
   }, [isOpen]);
 
-  const handleCloseWithAnimation = () => {
-    playClickSound();
-    if (backdropRef.current && modalRef.current) {
+  const handleClose = () => {
+    if (overlayRef.current && modalRef.current) {
       gsap.to(modalRef.current, {
-        scale: 0.92,
-        y: 15,
+        scale: 0.9,
         opacity: 0,
-        duration: 0.18,
+        y: 20,
+        duration: 0.25,
         ease: "power2.in",
       });
-      gsap.to(backdropRef.current, {
+      gsap.to(overlayRef.current, {
         opacity: 0,
-        duration: 0.2,
+        duration: 0.25,
         ease: "power2.in",
         onComplete: onClose,
       });
@@ -88,7 +111,6 @@ export default function ResumeModal({
   };
 
   const handlePrint = () => {
-    playClickSound();
     window.print();
   };
 
@@ -96,229 +118,230 @@ export default function ResumeModal({
 
   return (
     <div
-      ref={backdropRef}
-      onClick={handleCloseWithAnimation}
-      className="fixed inset-0 z-[1050] bg-zinc-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+      ref={overlayRef}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+      onClick={handleClose}
     >
       <div
         ref={modalRef}
+        className="bg-[#141413] text-[#F4F3EF] rounded-3xl max-w-3xl w-full p-6 sm:p-10 max-h-[92vh] overflow-y-auto shadow-2xl relative border border-white/15 will-change-transform"
         onClick={(e) => e.stopPropagation()}
-        className="bg-[#FAF8F3] border-3 border-zinc-900 rounded-2xl sm:rounded-3xl shadow-[8px_8px_0px_#1e1e1e] max-w-3xl w-full my-auto overflow-hidden flex flex-col max-h-[92vh]"
       >
-        {/* Top Control Bar */}
-        <div className="bg-[#edeae1] border-b-2.5 border-zinc-900 px-4 sm:px-6 py-3.5 flex items-center justify-between flex-shrink-0">
+        {/* Top Header */}
+        <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#c3e3c3] border-1.5 border-zinc-900 flex items-center justify-center shadow-[1.5px_1.5px_0px_#1e1e1e]">
-              <FileText className="w-4 h-4 text-emerald-950" />
-            </div>
-            <div>
-              <h3 className="font-extrabold text-sm sm:text-base text-zinc-950">
-                Curriculum Vitae / Resume
-              </h3>
-              <p className="text-[11px] text-zinc-600 font-mono">
-                Aniket Singh • Software Engineer @ TCS
-              </p>
-            </div>
+            <span className="font-mono text-xs uppercase tracking-wider bg-white/10 text-[#F4F3EF] px-3 py-1 rounded-full font-medium border border-white/10">
+              Curriculum Vitae
+            </span>
+            <span className="text-xs text-emerald-400 font-mono">Verified Resume</span>
           </div>
-
           <div className="flex items-center gap-2">
+            <a
+              href="/Aniket_Singh_Resume.pdf"
+              download="Aniket_Singh_Resume.pdf"
+              className="p-2 rounded-full hover:bg-white/10 text-[#8A8985] hover:text-white transition-colors cursor-pointer"
+              title="Download Original PDF"
+              aria-label="Download Original PDF"
+            >
+              <DownloadIcon className="w-5 h-5" />
+            </a>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-1.5 border-zinc-900 text-xs font-bold text-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e] hover:bg-[#def7ec] cursor-pointer transition-colors"
-              title="Print or Save as PDF"
+              className="p-2 rounded-full hover:bg-white/10 text-[#8A8985] hover:text-white transition-colors cursor-pointer"
+              title="Print Resume"
+              aria-label="Print Resume"
             >
-              <Printer className="w-3.5 h-3.5 text-zinc-800" />
-              <span className="hidden sm:inline">Print / Save PDF</span>
+              <PrintIcon className="w-5 h-5" />
             </button>
-
             <button
-              onClick={handleCloseWithAnimation}
-              className="w-8 h-8 rounded-lg bg-white border-1.5 border-zinc-900 flex items-center justify-center text-zinc-700 hover:text-zinc-950 shadow-[1.5px_1.5px_0px_#1e1e1e] cursor-pointer"
-              aria-label="Close resume"
+              onClick={handleClose}
+              className="p-2 rounded-full hover:bg-white/10 text-[#8A8985] hover:text-white transition-colors cursor-pointer"
+              aria-label="Close"
             >
-              <X className="w-4 h-4" />
+              <CloseIcon className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        {/* Scrollable Printable Resume Sheet */}
-        <div className="p-5 sm:p-8 overflow-y-auto space-y-6 bg-white text-zinc-900 font-sans">
-          {/* Resume Header */}
-          <div className="border-b-2 border-zinc-900 pb-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-950 tracking-tight">
-                  Aniket Singh
-                </h1>
-                <p className="text-sm font-bold text-emerald-700 mt-0.5">
-                  Software Engineer @ Tata Consultancy Services (TCS) • Full Stack Developer
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:items-end gap-1 text-xs text-zinc-600 font-mono">
-                <span>aniket.singh@bytebloom.dev</span>
-                <span>aniket.singh07vs@gmail.com</span>
-                <span className="flex items-center gap-2">
-                  <a
-                    href="https://github.com/sin-07"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-zinc-900 font-bold hover:underline"
-                  >
-                    github.com/sin-07
-                  </a>
-                  <span>•</span>
-                  <a
-                    href="https://www.linkedin.com/in/aniket-singhh/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-zinc-900 font-bold hover:underline"
-                  >
-                    LinkedIn
-                  </a>
-                </span>
-              </div>
+        {/* CV Content */}
+        <div className="space-y-7 text-left">
+          {/* Header Info */}
+          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-white/10 pb-5">
+            <div>
+              <h2 className="font-serif font-light text-3xl sm:text-4xl text-[#F4F3EF] tracking-tight">
+                Aniket <span className="font-serif italic font-normal text-white/70">Singh</span>
+              </h2>
+              <p className="text-xs sm:text-sm font-sans text-emerald-400 mt-1">
+                +91 (947) 323 6395 · aniket.singh07vs@gmail.com
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-[#8A8985]">
+              <a
+                href="https://github.com/sin-07"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white flex items-center gap-1.5 transition-colors"
+              >
+                <GitHubIcon className="w-3.5 h-3.5" /> github.com/sin-07
+              </a>
+              <a
+                href="https://linkedin.com/in/aniket-singhh"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-[#0a66c2] flex items-center gap-1.5 transition-colors"
+              >
+                <LinkedInIcon className="w-3.5 h-3.5" /> linkedin.com/in/aniket-singhh
+              </a>
             </div>
           </div>
 
-          {/* Professional Summary */}
+          {/* Career Summary */}
           <div>
-            <h2 className="text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase mb-2">
-              // Professional Summary
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed font-medium">
-              Software Engineer at Tata Consultancy Services (TCS) and Computer Science graduate with strong foundations in software engineering, distributed systems, algorithms, and clean architecture. Experienced in architecting production web platforms, real-time engines, and responsive user experiences using React, Next.js, Node.js, and TypeScript.
+            <h3 className="font-mono text-xs uppercase tracking-widest text-[#8A8985] border-b border-white/10 pb-2 mb-3">
+              (01 / Career Summary)
+            </h3>
+            <p className="text-xs sm:text-sm text-[#C4C3BE] leading-relaxed font-sans">
+              Innovative and detail-oriented Software Engineer with hands-on experience in Java, Python, and MERN stack development. Strong understanding of OOPs, and System Design with a passion for building scalable, high-performance backend systems. Adept at designing RESTful APIs, optimizing databases.
             </p>
-          </div>
-
-          {/* Experience Section */}
-          <div>
-            <h2 className="text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase mb-3">
-              // Experience
-            </h2>
-
-            <div className="space-y-4">
-              {/* TCS Experience */}
-              <div className="p-4 rounded-xl bg-[#FAF8F3] border-1.5 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
-                  <h3 className="font-extrabold text-sm sm:text-base text-zinc-950">
-                    Software Engineer — Tata Consultancy Services (TCS)
-                  </h3>
-                  <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300 w-fit">
-                    Present
-                  </span>
-                </div>
-                <p className="text-xs text-zinc-600 mb-2 font-medium">
-                  Enterprise System Architecture • Scalable Microservices • Cloud Solutions
-                </p>
-                <ul className="space-y-1 text-xs text-zinc-700 pl-1">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                    <span>Developing scalable enterprise full-stack modules and robust RESTful API services.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                    <span>Writing clean, modular code with rigorous automated validation and agile methodologies.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                    <span>Collaborating across agile engineering delivery squads for continuous deployments.</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* ByteBloom Experience */}
-              <div className="p-4 rounded-xl bg-[#FAF8F3] border-1.5 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
-                  <h3 className="font-extrabold text-sm sm:text-base text-zinc-950">
-                    Founder &amp; Full Stack Lead — ByteBloom
-                  </h3>
-                  <span className="text-xs font-mono font-bold text-zinc-700 bg-zinc-200 px-2 py-0.5 rounded border border-zinc-400 w-fit">
-                    Ongoing
-                  </span>
-                </div>
-                <p className="text-xs text-zinc-600 mb-2 font-medium">
-                  Client Engineering • Digital Architecture • Production Products
-                </p>
-                <ul className="space-y-1 text-xs text-zinc-700 pl-1">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                    <span>Engineered high-performance web applications including CricketWala PlayArena &amp; Raven Tutorials.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                    <span>Built Samastipur Blood Bank platform connecting volunteer donors with regional hospitals.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
 
           {/* Education */}
           <div>
-            <h2 className="text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase mb-3">
-              // Education
-            </h2>
-            <div className="p-4 rounded-xl bg-[#FAF8F3] border-1.5 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
-                <h3 className="font-extrabold text-sm sm:text-base text-zinc-950">
-                  B.Tech in Computer Science &amp; Engineering
-                </h3>
-                <span className="text-xs font-mono text-zinc-600">2022 - 2026</span>
-              </div>
-              <p className="text-xs text-zinc-700 leading-relaxed font-medium">
-                Core Coursework: Data Structures &amp; Algorithms, Database Management Systems (DBMS), Operating Systems, Computer Networks, Object-Oriented Software Design.
-              </p>
+            <h3 className="font-mono text-xs uppercase tracking-widest text-[#8A8985] border-b border-white/10 pb-2 mb-3">
+              (02 / Education)
+            </h3>
+            <div className="space-y-3">
+              {education.map((edu, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between text-xs p-3.5 rounded-xl bg-white/5 border border-white/10 gap-2"
+                >
+                  <div>
+                    <span className="font-semibold text-[#F4F3EF]">{edu.degree}</span>
+                    <span className="text-[#8A8985] block mt-0.5">
+                      {edu.institution}, {edu.location}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-emerald-400 text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                      {edu.highlights[0]}
+                    </span>
+                    <span className="font-mono text-[#8A8985] text-[11px]">{edu.period}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Skills Matrix */}
+          {/* Experience */}
           <div>
-            <h2 className="text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase mb-2">
-              // Core Technical Skills
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              <div className="p-2.5 rounded-lg bg-[#FAF8F3] border border-zinc-300">
-                <strong className="text-zinc-950 font-bold block mb-1">Frontend &amp; UI:</strong>
-                <span className="text-zinc-700 font-mono">React 19, Next.js 16, TypeScript, Tailwind CSS, HTML5, CSS3, GSAP</span>
+            <h3 className="font-mono text-xs uppercase tracking-widest text-[#8A8985] border-b border-white/10 pb-2 mb-3">
+              (03 / Experience)
+            </h3>
+            <div className="space-y-4">
+              {experience.map((exp, idx) => (
+                <div key={idx} className="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2">
+                    <span className="font-semibold text-sm text-[#F4F3EF]">
+                      {exp.company} — <span className="text-emerald-400">{exp.role}</span>
+                    </span>
+                    <span className="text-[11px] font-mono text-[#8A8985]">{exp.period}</span>
+                  </div>
+                  <ul className="list-disc list-inside text-xs text-[#8A8985] mt-3 space-y-1.5 font-sans leading-relaxed">
+                    {exp.responsibilities.map((item, rIdx) => (
+                      <li key={rIdx}>{item}</li>
+                    ))}
+                  </ul>
+                  <div className="mt-3 pt-3 border-t border-white/10 text-xs font-mono text-[#8A8985]">
+                    <strong className="text-white/80">Tech Stack:</strong> {exp.technologies.join(", ")}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Projects */}
+          <div>
+            <h3 className="font-mono text-xs uppercase tracking-widest text-[#8A8985] border-b border-white/10 pb-2 mb-3">
+              (04 / Projects)
+            </h3>
+            <div className="space-y-4">
+              {/* Rental Car Website */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10">
+                <div className="flex justify-between items-baseline mb-2">
+                  <span className="font-semibold text-sm text-[#F4F3EF]">
+                    Rental Car Website — <a href="https://github.com/sin-07" target="_blank" rel="noreferrer" className="text-emerald-400 hover:underline">Github ↗</a>
+                  </span>
+                  <span className="text-[11px] font-mono text-[#8A8985]">Jan 25</span>
+                </div>
+                <ul className="list-disc list-inside text-xs text-[#8A8985] space-y-1 font-sans">
+                  <li>Implemented car listing with pickup/return locations, date &amp; time selection, and real-time availability check.</li>
+                  <li>Created an admin panel to add, update, and remove cars, view bookings, and manage users.</li>
+                </ul>
+                <div className="mt-3 pt-2 text-[11px] font-mono text-[#8A8985]">
+                  <strong className="text-white/80">Tech Stack:</strong> Node.js, Express.js, React.js, MongoDB, Cloudinary, RESTful API, JWT Authentication
+                </div>
               </div>
-              <div className="p-2.5 rounded-lg bg-[#FAF8F3] border border-zinc-300">
-                <strong className="text-zinc-950 font-bold block mb-1">Backend &amp; APIs:</strong>
-                <span className="text-zinc-700 font-mono">Node.js, Express.js, REST APIs, Microservices, Python, C++, Java</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-[#FAF8F3] border border-zinc-300">
-                <strong className="text-zinc-950 font-bold block mb-1">Databases:</strong>
-                <span className="text-zinc-700 font-mono">MongoDB, PostgreSQL, SQL, Redis, Mongoose ODM</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-[#FAF8F3] border border-zinc-300">
-                <strong className="text-zinc-950 font-bold block mb-1">Tools &amp; Practices:</strong>
-                <span className="text-zinc-700 font-mono">Git, GitHub, Docker, Postman, Vercel, Linux/CLI, Clean Code, Agile</span>
+
+              {/* TradeXpert */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10">
+                <div className="flex justify-between items-baseline mb-2">
+                  <span className="font-semibold text-sm text-[#F4F3EF]">
+                    TradeXpert — Full-Stack Trading Platform — <a href="https://github.com/sin-07" target="_blank" rel="noreferrer" className="text-emerald-400 hover:underline">Github ↗</a>
+                  </span>
+                  <span className="text-[11px] font-mono text-[#8A8985]">Oct 25</span>
+                </div>
+                <ul className="list-disc list-inside text-xs text-[#8A8985] space-y-1 font-sans">
+                  <li>Developed a multi-asset trading platform supporting Indian, US, and cryptocurrency markets.</li>
+                  <li>Integrated Yahoo Finance API to fetch real-time stock data, live prices, and market analytics.</li>
+                  <li>Implemented buy/sell order functionality with transaction history and portfolio tracking.</li>
+                  <li>Built an intuitive React.js UI ensuring seamless, real-time updates and responsive performance.</li>
+                </ul>
+                <div className="mt-3 pt-2 text-[11px] font-mono text-[#8A8985]">
+                  <strong className="text-white/80">Tech Stack:</strong> React.js, Node.js, Express.js, MongoDB, Yahoo Finance API, JWT Authentication
+                </div>
               </div>
             </div>
+          </div>
+
+          {/* Technical Skills */}
+          <div>
+            <h3 className="font-mono text-xs uppercase tracking-widest text-[#8A8985] border-b border-white/10 pb-2 mb-3">
+              (05 / Technical Skills)
+            </h3>
+            <p className="text-xs sm:text-sm font-mono text-[#C4C3BE] leading-relaxed p-4 rounded-2xl bg-white/5 border border-white/10">
+              Java, JavaScript, HTML, CSS, React.js, Node.js, Express.js, MongoDB, Github, Eclipse, Visual Studio Code, Ubuntu
+            </p>
           </div>
         </div>
 
-        {/* Modal Bottom Bar */}
-        <div className="p-4 bg-[#edeae1] border-t-2 border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-3 flex-shrink-0">
-          <span className="text-xs text-zinc-600 font-mono text-center sm:text-left">
-            Ready to hire or collaborate?
-          </span>
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+        {/* Bottom CTA with direct Download Resume button */}
+        <div className="mt-8 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <a
+            href="/Aniket_Singh_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#8A8985] hover:text-white underline transition-colors"
+          >
+            <span>View PDF Document</span>
+            <ExternalLinkIcon className="w-3 h-3" />
+          </a>
+
+          <div className="flex items-center gap-3">
             <button
-              onClick={handleCloseWithAnimation}
-              className="flex-1 sm:flex-initial px-4 py-2 rounded-xl border-1.5 border-zinc-900 bg-white text-xs font-bold text-zinc-900 shadow-[1.5px_1.5px_0px_#1e1e1e] cursor-pointer"
+              onClick={handleClose}
+              className="px-5 py-2.5 rounded-full border border-white/15 hover:bg-white/10 text-xs sm:text-sm font-mono text-[#8A8985] hover:text-white transition-colors cursor-pointer"
             >
-              Close
+              Fermer
             </button>
-            <button
-              onClick={() => {
-                handleCloseWithAnimation();
-                onOpenContact();
-              }}
-              className="flex-1 sm:flex-initial px-4 py-2 rounded-xl border-2 border-zinc-900 bg-[#f8b4a6] hover:bg-[#f69d8b] text-xs font-bold text-zinc-950 shadow-[2px_2px_0px_#1e1e1e] neo-btn cursor-pointer"
+            <a
+              href="/Aniket_Singh_Resume.pdf"
+              download="Aniket_Singh_Resume.pdf"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#F4F3EF] text-black hover:bg-white text-xs sm:text-sm font-semibold transition-all shadow-md cursor-pointer"
             >
-              Contact Aniket
-            </button>
+              <DownloadIcon className="w-4 h-4" />
+              <span>Download PDF Resume</span>
+            </a>
           </div>
         </div>
       </div>

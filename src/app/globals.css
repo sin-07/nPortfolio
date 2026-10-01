@@ -1,103 +1,295 @@
 @import "tailwindcss";
 
-:root {
-  --bg-main: #f5f4ed;
-  --text-main: #18181b;
-  --border-color: #1e1e1e;
-  --card-bg: #ffffff;
+@layer base {
+  :root {
+    --bg-primary: #0e0e0d;
+    --bg-secondary: #141413;
+    --bg-tertiary: #1c1c1a;
+    --text-primary: #f4f3ef;
+    --text-secondary: #8a8985;
+    --text-muted: #5c5b57;
+    --border-light: rgba(244, 243, 239, 0.12);
+    --border-hover: rgba(244, 243, 239, 0.35);
+    --accent-dot: #22c55e;
+  }
+
+  html {
+    scroll-behavior: auto;
+    max-width: 100vw;
+    scroll-padding-top: 80px;
+    overflow-x: hidden;
+    background-color: #0e0e0d;
+    color: #f4f3ef;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #0e0e0d !important;
+    color: #f4f3ef !important;
+    width: 100%;
+    max-width: 100vw;
+    font-family: var(--font-sans), 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(244, 243, 239, 0.2) #0e0e0d;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0e0e0d;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(244, 243, 239, 0.2);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(244, 243, 239, 0.4);
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 85px;
-  overflow-x: hidden;
-  max-width: 100vw;
+.font-sans {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-body {
-  background-color: #f5f4ed !important;
-  color: #18181b !important;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-  max-width: 100vw;
+.font-serif {
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
-.font-pixel {
-  font-family: 'Pixelify Sans', 'Silkscreen', monospace;
+.font-mono {
+  font-family: 'Space Mono', 'Courier New', monospace;
 }
 
-.font-pixel-heading {
-  font-family: 'Pixelify Sans', monospace;
-  letter-spacing: -0.01em;
+.font-editorial {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
 }
 
-.font-handwriting {
-  font-family: 'Caveat', cursive;
+/* Background Noise Grain */
+.grain {
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
-/* Neo-brutalist button and card shadows */
-.neo-border {
-  border: 1.5px solid #1e1e1e;
+/* Pulsing Green Dot */
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.3);
+  }
 }
 
-.neo-shadow-sm {
-  box-shadow: 2px 2px 0px #1e1e1e;
+.nav__cta-dot {
+  background-color: #22c55e;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  animation: 2s ease-in-out infinite pulseDot;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
 }
 
-.neo-shadow {
-  box-shadow: 3px 3px 0px #1e1e1e;
+/* Dot Matrix */
+.dot-matrix {
+  background-image: radial-gradient(rgba(244, 243, 239, 0.12) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
 }
 
-.neo-shadow-lg {
-  box-shadow: 5px 5px 0px #1e1e1e;
+/* 3D Perspective Grid Floor */
+.perspective-grid-floor {
+  transform-origin: bottom;
+  background-image: linear-gradient(90deg, rgba(244, 243, 239, 0.06) 1px, transparent 1px),
+                    linear-gradient(rgba(244, 243, 239, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(350px) rotateX(60deg);
 }
 
-/* Interactive tactile click */
-.neo-btn {
-  transition: all 0.15s ease;
+/* Pill & Button Styles */
+.studiors-pill {
+  cursor: pointer;
+  background-color: #141413;
+  color: #f4f3ef;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
 }
 
-.neo-btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #1e1e1e;
+.studiors-pill:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
-.neo-btn:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0px #1e1e1e;
+@media (min-width: 640px) {
+  .studiors-pill {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
 }
 
-/* Blinking cursor animation */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+.circle-btn {
+  background-color: #141413;
+  color: #f4f3ef;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  cursor: pointer;
 }
 
-.cursor-blink {
-  animation: blink 1s infinite;
+.circle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
+.pill-nav {
+  cursor: pointer;
+  background-color: #141413;
+  color: #f4f3ef;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pill-nav:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.pill-btn {
+  cursor: pointer;
+  background-color: #141413;
+  color: #f4f3ef;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+}
+
+.pill-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Spotlight Card Hover Effect */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card:before {
+  content: "";
+  background: radial-gradient(600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(244, 243, 239, 0.08), transparent 40%);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.4s;
+  position: absolute;
+  inset: -1px;
+}
+
+/* Custom Cursor */
+.custom-cursor-dot {
+  pointer-events: none;
+  z-index: 9999;
+  background-color: #f4f3ef;
+  border-radius: 50%;
   width: 8px;
   height: 8px;
+  transition: opacity 0.2s, transform 0.1s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
 }
 
-::-webkit-scrollbar-track {
-  background: #edece4;
+.custom-cursor-ring {
+  pointer-events: none;
+  z-index: 9998;
+  backdrop-filter: blur(1px);
+  border: 1px solid rgba(244, 243, 239, 0.35);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s,
+              border-color 0.3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #d4d1c4;
-  border-radius: 4px;
-  border: 1px solid #1e1e1e;
+.custom-cursor-ring.cursor-hover {
+  background-color: rgba(244, 243, 239, 0.08);
+  border-color: rgba(244, 243, 239, 0.7);
+  width: 68px;
+  height: 68px;
 }
 
-/* Hide scrollbars on touch carousel containers */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Lenis Recommended Styles */
+html.lenis, html.lenis body {
+  height: auto;
 }
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }

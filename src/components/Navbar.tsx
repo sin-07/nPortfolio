@@ -1,509 +1,228 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, Menu, X, Search, Briefcase, FileText, Volume2, VolumeX } from "lucide-react";
-import { playClickSound, isSoundMuted, setSoundMuted } from "@/utils/audio";
-import gsap from "gsap";
+import React, { useState, useEffect } from "react";
+import Magnetic from "@/components/Magnetic";
+import { portfolioData } from "@/data/portfolioData";
 
 interface NavbarProps {
-  onOpenContact: () => void;
-  onOpenAbout: () => void;
-  onOpenCommandPalette?: () => void;
-  onOpenJourney?: () => void;
+  onOpenArticles: () => void;
   onOpenResume?: () => void;
+  onOpenContact: () => void;
 }
 
 export default function Navbar({
-  onOpenContact,
-  onOpenAbout,
-  onOpenCommandPalette,
-  onOpenJourney,
+  onOpenArticles,
   onOpenResume,
+  onOpenContact,
 }: NavbarProps) {
-  const [activeSection, setActiveSection] = useState("home");
-  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMenuRendered, setIsMenuRendered] = useState(false);
-  const [soundMuted, setSoundMutedState] = useState(false);
+  const { profile, socials } = portfolioData;
 
-  useEffect(() => {
-    setSoundMutedState(isSoundMuted());
-  }, []);
-
-  const toggleSound = () => {
-    const next = !soundMuted;
-    setSoundMuted(next);
-    setSoundMutedState(next);
-    if (!next) {
-      playClickSound();
-    }
-  };
-
-  const navRef = useRef<HTMLElement>(null);
-  const pillRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const isInitialMount = useRef(true);
-  const isManualScrollRef = useRef(false);
-  const manualScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const toggleMobileMenu = () => {
-    if (!mobileMenuOpen) {
-      setIsMenuRendered(true);
-      setMobileMenuOpen(true);
-    } else {
-      closeMobileMenu();
-    }
-  };
-
-  const closeMobileMenu = () => {
-    if (mobileMenuRef.current) {
-      gsap.to(mobileMenuRef.current, {
-        opacity: 0,
-        y: -12,
-        duration: 0.22,
-        ease: "power2.in",
-        onComplete: () => {
-          setIsMenuRendered(false);
-          setMobileMenuOpen(false);
-        },
-      });
-    } else {
-      setIsMenuRendered(false);
-      setMobileMenuOpen(false);
-    }
-  };
-
-  // Animate mobile dropdown appearance with GSAP
-  useEffect(() => {
-    if (isMenuRendered && mobileMenuRef.current) {
-      gsap.fromTo(
-        mobileMenuRef.current,
-        { opacity: 0, y: -15 },
-        { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }
-      );
-      gsap.fromTo(
-        ".mobile-nav-item",
-        { x: -25, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.28, stagger: 0.045, ease: "power3.out" }
-      );
-    }
-  }, [isMenuRendered]);
-
-  // Clean #home from URL on initial mount if present
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash === "#home") {
-      window.history.replaceState(null, "", window.location.pathname);
-    }
-  }, []);
-
-  // Smooth scroll to target section and animate pill
-  const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
-    setHoveredSection(null);
-
-    // Suppress scroll spy updates while smooth scrolling so the pill glides smoothly without jumping
-    isManualScrollRef.current = true;
-    if (manualScrollTimeoutRef.current) {
-      clearTimeout(manualScrollTimeoutRef.current);
-    }
-    manualScrollTimeoutRef.current = setTimeout(() => {
-      isManualScrollRef.current = false;
-    }, 850);
-
-    if (sectionId === "home") {
-      // Remove any hash from the URL so #home never appears
-      if (typeof window !== "undefined" && window.location.hash) {
-        window.history.replaceState(null, "", window.location.pathname);
-      }
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-      return;
-    }
-
-    const targetEl = document.getElementById(sectionId);
-    if (targetEl) {
-      const headerOffset = 78;
-      const elementPosition = targetEl.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: Math.max(0, offsetPosition),
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const handleNavClick = (e: React.MouseEvent, sectionId: string) => {
-    e.preventDefault();
-    scrollToSection(sectionId);
-  };
-
-  const handleMobileNavClick = (e: React.MouseEvent, sectionId: string) => {
-    e.preventDefault();
-    closeMobileMenu();
-    scrollToSection(sectionId);
-  };
-
-  // Scroll spy to detect active section when scrolling naturally
   useEffect(() => {
     const handleScroll = () => {
-      if (isManualScrollRef.current) return;
-
-      // Bottom of page detection (Contact section)
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 70) {
-        setActiveSection("contact");
-        return;
-      }
-
-      // Top of page detection (Home section)
-      if (window.scrollY < 80) {
-        setActiveSection("home");
-        return;
-      }
-
-      const sections = ["home", "services", "projects", "technologies", "about", "contact"];
-      const scrollPosition = window.scrollY + 180;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i]);
-          break;
-        }
-      }
+      setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (manualScrollTimeoutRef.current) {
-        clearTimeout(manualScrollTimeoutRef.current);
-      }
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // GSAP ultra-smooth sliding pill animation
-  useEffect(() => {
-    const currentTargetId = hoveredSection || activeSection;
-    const targetElement = itemRefs.current[currentTargetId];
-    const navContainer = navRef.current;
-    const pill = pillRef.current;
-
-    if (!targetElement || !navContainer || !pill) return;
-
-    const navRect = navContainer.getBoundingClientRect();
-    const targetRect = targetElement.getBoundingClientRect();
-
-    const x = targetRect.left - navRect.left;
-    const y = targetRect.top - navRect.top;
-    const width = targetRect.width;
-    const height = targetRect.height;
-
-    if (isInitialMount.current) {
-      // Immediate set on mount without jarring slide from 0
-      gsap.set(pill, {
-        x,
-        y,
-        width,
-        height,
-        opacity: 1,
-      });
-      isInitialMount.current = false;
+  const scrollToSection = (id: string) => {
+    setMobileMenuOpen(false);
+    const target = document.getElementById(id);
+    if (!target) return;
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (el: HTMLElement, opts: { offset: number; duration: number }) => void } }).__lenis;
+    if (lenis) {
+      lenis.scrollTo(target, { offset: -70, duration: 1.2 });
     } else {
-      // Fluid spring-smooth glide
-      gsap.to(pill, {
-        x,
-        y,
-        width,
-        height,
-        opacity: 1,
-        duration: 0.35,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
+      target.scrollIntoView({ behavior: "smooth" });
     }
-  }, [activeSection, hoveredSection]);
+  };
 
-  // Recalculate position on window resize
-  useEffect(() => {
-    const handleResize = () => {
-      const currentTargetId = hoveredSection || activeSection;
-      const targetElement = itemRefs.current[currentTargetId];
-      const navContainer = navRef.current;
-      const pill = pillRef.current;
-
-      if (!targetElement || !navContainer || !pill) return;
-
-      const navRect = navContainer.getBoundingClientRect();
-      const targetRect = targetElement.getBoundingClientRect();
-
-      gsap.set(pill, {
-        x: targetRect.left - navRect.left,
-        y: targetRect.top - navRect.top,
-        width: targetRect.width,
-        height: targetRect.height,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [activeSection, hoveredSection]);
-
-  const navItems = [
-    { label: "Home", id: "home", href: "/" },
-    { label: "Services", id: "services", href: "#services" },
-    { label: "Projects", id: "projects", href: "#projects" },
-    { label: "Technologies", id: "technologies", href: "#technologies" },
-    { label: "About", id: "about", href: "#about" },
-    { label: "Contact", id: "contact", href: "#contact" },
-  ];
+  const githubUrl = socials.find((s) => s.name.toLowerCase() === "github")?.url || "https://github.com";
 
   return (
-    <header className="sticky top-0 z-40 w-full py-3 sm:py-4 px-3.5 sm:px-8 bg-[#f5f4ed]/95 backdrop-blur-md border-b border-zinc-300/80">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
-        {/* Brand Logo - Aniket Singh */}
-        <Link
-          href="/"
-          onClick={(e) => handleNavClick(e, "home")}
-          className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer min-w-0"
-        >
-          <div className="relative w-8 h-8 sm:w-10 sm:h-10 overflow-hidden rounded-xl border-1.5 border-zinc-900 bg-[#def7ec] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1e1e1e] group-hover:scale-105 transition-transform flex-shrink-0">
-            <Image
-              src="/images/aniket-portrait.jpg"
-              alt="Aniket Singh - Software Engineer @ TCS"
-              fill
-              sizes="40px"
-              className="object-cover"
-            />
-          </div>
-          <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-sm sm:text-lg tracking-tight text-zinc-950 font-sans leading-tight truncate">
-                Aniket Singh
-              </span>
-              <span className="text-[9px] sm:text-[10px] font-pixel text-emerald-700 bg-emerald-100 border border-emerald-300 px-1.5 py-0.2 rounded flex-shrink-0">
-                ByteBloom
-              </span>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-[#0E0E0D]/90 backdrop-blur-md border-b border-white/10 py-3.5 shadow-2xl"
+            : "bg-transparent py-5 sm:py-7"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-10 flex items-center justify-between">
+          {/* Logo */}
+          <a
+            href="#hero"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("hero");
+            }}
+            className="group flex items-center gap-3 text-white hover:opacity-90 transition-opacity"
+            aria-label="Aniket Singh, return to top"
+          >
+            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-mono text-xs font-bold text-emerald-400 group-hover:border-emerald-400/50 group-hover:scale-105 transition-all">
+              AS
             </div>
-            <span className="text-[9px] sm:text-xs text-zinc-600 font-medium tracking-wide truncate max-w-[130px] xs:max-w-[210px] sm:max-w-none">
-              Software Engineer @ TCS • Full Stack Developer
+            <span className="font-sans font-bold text-sm sm:text-base tracking-tight text-[#F4F3EF]">
+              {profile.firstName.toLowerCase()}
             </span>
-          </div>
-        </Link>
+          </a>
 
-        {/* Desktop Navigation Capsule with GSAP Smooth Sliding Pill */}
-        <nav
-          ref={navRef}
-          onMouseLeave={() => setHoveredSection(null)}
-          className="relative hidden md:flex items-center bg-[#eae9df]/90 border border-zinc-400/80 rounded-full p-1 shadow-[1px_1px_0px_#1e1e1e]"
-        >
-          {/* Animated Sliding Pill Indicator */}
-          <div
-            ref={pillRef}
-            className="absolute top-0 left-0 rounded-full bg-[#c3e3c3] border border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] pointer-events-none z-0 opacity-0 will-change-transform"
-          />
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center space-x-8 text-xs font-sans tracking-wide text-[#8A8985]">
+            <button
+              onClick={() => scrollToSection("projects")}
+              className="hover:text-[#F4F3EF] transition-colors cursor-pointer"
+            >
+              Projects
+            </button>
+            <button
+              onClick={() => scrollToSection("about")}
+              className="hover:text-[#F4F3EF] transition-colors cursor-pointer"
+            >
+              About
+            </button>
+            <button
+              onClick={() => scrollToSection("experience")}
+              className="hover:text-[#F4F3EF] transition-colors cursor-pointer"
+            >
+              Experience
+            </button>
+            <button
+              onClick={() => scrollToSection("feed")}
+              className="hover:text-[#F4F3EF] transition-colors cursor-pointer"
+            >
+              Feed
+            </button>
+          </nav>
 
-          {navItems.map((item) => {
-            const isTarget = (hoveredSection || activeSection) === item.id;
-            return (
-              <a
-                key={item.id}
-                ref={(el) => {
-                  itemRefs.current[item.id] = el;
-                }}
-                href={item.href}
-                onMouseEnter={() => setHoveredSection(item.id)}
-                onClick={(e) => handleNavClick(e, item.id)}
-                className={`relative z-10 text-xs lg:text-sm font-semibold px-3.5 py-1.5 rounded-full transition-colors duration-200 select-none cursor-pointer ${
-                  isTarget
-                    ? "text-zinc-950 font-bold"
-                    : "text-zinc-700 hover:text-zinc-950"
-                }`}
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3">
+            <Magnetic strength={0.25}>
+              <button
+                onClick={onOpenContact}
+                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-[#141413] hover:border-white/40 text-xs font-sans font-medium text-[#F4F3EF] transition-all cursor-pointer shadow-lg hover:shadow-emerald-500/5"
               >
-                {item.label}
-              </a>
-            );
-          })}
-        </nav>
+                <span className="nav__cta-dot" />
+                <span>Let&#39;s talk</span>
+              </button>
+            </Magnetic>
 
-        {/* Right Actions: Sound Toggle + Search / Ctrl+K + CV + Status badge + Let's Build CTA */}
-        <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
-          {/* Sound FX Audio Toggle */}
-          <button
-            onClick={toggleSound}
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-[#eae9df] hover:bg-white border-1.5 border-zinc-900 shadow-[1px_1px_0px_#1e1e1e] text-zinc-700 hover:text-zinc-950 transition-all cursor-pointer"
-            title={soundMuted ? "Unmute Sound FX" : "Mute Sound FX"}
-            aria-label="Toggle Sound Effects"
-          >
-            {soundMuted ? (
-              <VolumeX className="w-3.5 h-3.5 text-zinc-400" />
-            ) : (
-              <Volume2 className="w-3.5 h-3.5 text-emerald-700" />
+            {onOpenResume && (
+              <button
+                onClick={onOpenResume}
+                className="pill-nav cursor-pointer text-xs"
+                aria-label="View Resume"
+              >
+                Resume
+              </button>
             )}
-          </button>
 
-          {/* Quick Search / Command Palette Trigger */}
-          <button
-            onClick={() => {
-              playClickSound();
-              if (onOpenCommandPalette) onOpenCommandPalette();
-            }}
-            className="flex items-center gap-1.5 bg-[#eae9df] hover:bg-[#def7ec] border-1.5 border-zinc-900 rounded-full px-2.5 sm:px-3 py-1 text-xs font-semibold text-zinc-800 shadow-[1px_1px_0px_#1e1e1e] hover:shadow-[2px_2px_0px_#1e1e1e] transition-all cursor-pointer"
-            title="Quick Actions & Search (Ctrl+K)"
-          >
-            <Search className="w-3.5 h-3.5 text-zinc-700" />
-            <span className="hidden sm:inline font-mono text-[10px] font-bold bg-[#FAF8F3] px-1.5 py-0.5 rounded border border-zinc-400">
-              Ctrl K
-            </span>
-          </button>
-
-          {/* Resume / CV Button */}
-          {onOpenResume && (
             <button
-              onClick={() => {
-                playClickSound();
-                onOpenResume();
-              }}
-              className="hidden lg:inline-flex items-center gap-1.5 bg-[#FAF8F3] hover:bg-[#c3e3c3] text-zinc-950 border-1.5 border-zinc-900 rounded-full px-3 py-1 text-xs font-bold shadow-[1px_1px_0px_#1e1e1e] transition-all cursor-pointer"
-              title="View Curriculum Vitae / Resume"
+              onClick={onOpenArticles}
+              className="pill-nav cursor-pointer text-xs"
+              aria-label="View Articles"
             >
-              <FileText className="w-3.5 h-3.5 text-emerald-900" />
-              <span>Resume</span>
+              Articles
             </button>
-          )}
 
-          {/* Status badge - click opens Career Journey Modal */}
-          <button
-            onClick={() => {
-              playClickSound();
-              if (onOpenJourney) onOpenJourney();
-            }}
-            className="hidden xl:flex items-center gap-1.5 bg-[#eae9df] hover:bg-[#def7ec] border-1.5 border-zinc-900 rounded-full px-3 py-1 text-xs font-semibold text-zinc-800 shadow-[1px_1px_0px_#1e1e1e] transition-colors cursor-pointer"
-            title="Click to view Career Journey & Milestones"
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Software Engineer @ TCS</span>
-          </button>
-
-          {/* Let's Build Button */}
-          <button
-            onClick={() => {
-              playClickSound();
-              onOpenContact();
-            }}
-            className="hidden xs:inline-flex items-center gap-1.5 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-lg sm:rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#1e1e1e] sm:shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
-          >
-            <span>Let&apos;s Build</span>
-            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => {
-              playClickSound();
-              toggleMobileMenu();
-            }}
-            className="md:hidden p-1.5 sm:p-2 rounded-lg border-2 border-zinc-900 bg-[#eae9df] shadow-[2px_2px_0px_#1e1e1e] cursor-pointer"
-            aria-label="Toggle Mobile Menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-5 h-5 text-zinc-900 transition-transform rotate-90" />
-            ) : (
-              <Menu className="w-5 h-5 text-zinc-900 transition-transform" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Animated Mobile Menu Dropdown */}
-      {isMenuRendered && (
-        <div
-          ref={mobileMenuRef}
-          className="md:hidden mt-3 pt-3 border-t-2 border-zinc-900/40 flex flex-col gap-2 will-change-transform"
-        >
-          {navItems.map((item) => (
             <a
-              key={item.id}
-              href={item.href}
-              onClick={(e) => {
-                playClickSound();
-                handleMobileNavClick(e, item.id);
-              }}
-              className={`mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 transition-all cursor-pointer ${
-                activeSection === item.id
-                  ? "bg-[#c3e3c3] text-zinc-950 border-zinc-900 shadow-[2px_2px_0px_#1e1e1e]"
-                  : "bg-[#eae9df] text-zinc-800 border-zinc-900/30 hover:border-zinc-900 hover:bg-white"
-              }`}
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="circle-btn"
+              aria-label="GitHub Profile"
             >
-              {item.label}
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                strokeWidth="0"
+                viewBox="0 0 496 512"
+                className="w-3.5 h-3.5"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z" />
+              </svg>
             </a>
-          ))}
 
-          {/* Mobile Command Palette shortcut */}
-          <button
-            onClick={() => {
-              playClickSound();
-              closeMobileMenu();
-              if (onOpenCommandPalette) onOpenCommandPalette();
-            }}
-            className="mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 bg-[#FAF8F3] text-zinc-900 border-zinc-900/40 hover:border-zinc-900 flex items-center justify-between cursor-pointer"
-          >
-            <span className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-zinc-700" />
-              <span>Search &amp; CLI</span>
-            </span>
-            <span className="font-mono text-xs bg-white px-1.5 py-0.5 rounded border border-zinc-400">
-              Ctrl+K
-            </span>
-          </button>
+            {/* Mobile menu toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white focus:outline-none"
+              aria-label="Toggle menu"
+            >
+              <div className="w-5 h-3.5 flex flex-col justify-between">
+                <span
+                  className={`block h-0.5 w-full bg-white transition-transform duration-300 ${
+                    mobileMenuOpen ? "rotate-45 translate-y-1.5" : ""
+                  }`}
+                />
+                <span
+                  className={`block h-0.5 w-full bg-white transition-transform duration-300 ${
+                    mobileMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                  }`}
+                />
+              </div>
+            </button>
+          </div>
+        </div>
+      </header>
 
-          {/* Mobile Resume link */}
-          {onOpenResume && (
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-[#0E0E0D]/98 backdrop-blur-2xl flex flex-col justify-between px-8 pt-28 pb-12 transition-all">
+          <p className="font-mono text-xs uppercase tracking-widest text-[#8A8985]">(Menu)</p>
+          <nav className="flex flex-col space-y-6 my-auto text-3xl font-serif text-[#F4F3EF]">
+            <button
+              onClick={() => scrollToSection("projects")}
+              className="flex items-baseline gap-4 text-left hover:text-white"
+            >
+              <i className="font-mono text-sm not-italic text-emerald-400">01</i>
+              <span>Projects</span>
+            </button>
+            <button
+              onClick={() => scrollToSection("about")}
+              className="flex items-baseline gap-4 text-left hover:text-white"
+            >
+              <i className="font-mono text-sm not-italic text-emerald-400">02</i>
+              <span>About &amp; Skills</span>
+            </button>
+            <button
+              onClick={() => scrollToSection("experience")}
+              className="flex items-baseline gap-4 text-left hover:text-white"
+            >
+              <i className="font-mono text-sm not-italic text-emerald-400">03</i>
+              <span>Experience &amp; Journey</span>
+            </button>
+            <button
+              onClick={() => scrollToSection("feed")}
+              className="flex items-baseline gap-4 text-left hover:text-white"
+            >
+              <i className="font-mono text-sm not-italic text-emerald-400">04</i>
+              <span>Feed &amp; Insights</span>
+            </button>
             <button
               onClick={() => {
-                playClickSound();
-                closeMobileMenu();
-                onOpenResume();
+                setMobileMenuOpen(false);
+                onOpenContact();
               }}
-              className="mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 bg-[#FAF8F3] text-zinc-900 border-zinc-900/40 hover:border-zinc-900 flex items-center gap-2 cursor-pointer"
+              className="flex items-baseline gap-4 text-left text-white"
             >
-              <FileText className="w-4 h-4 text-emerald-800" />
-              <span>View Resume / CV</span>
+              <i className="font-mono text-sm not-italic text-emerald-400">05</i>
+              <span className="italic font-editorial">Let&#39;s talk →</span>
             </button>
-          )}
-
-          {/* Mobile Journey link */}
-          <button
-            onClick={() => {
-              playClickSound();
-              closeMobileMenu();
-              if (onOpenJourney) onOpenJourney();
-            }}
-            className="mobile-nav-item px-4 py-2.5 rounded-xl text-sm font-bold border-2 bg-[#FAF8F3] text-zinc-900 border-zinc-900/40 hover:border-zinc-900 flex items-center gap-2 cursor-pointer"
-          >
-            <Briefcase className="w-4 h-4 text-emerald-700" />
-            <span>Career Journey (TCS)</span>
-          </button>
-
-          <button
-            onClick={() => {
-              playClickSound();
-              closeMobileMenu();
-              onOpenContact();
-            }}
-            className="mobile-nav-item mt-1 w-full flex items-center justify-center gap-2 bg-[#f8b4a6] hover:bg-[#f69d8b] text-zinc-950 border-2 border-zinc-900 rounded-xl py-3 font-bold text-sm shadow-[2.5px_2.5px_0px_#1e1e1e] neo-btn cursor-pointer"
-          >
-            <span>Let&apos;s Build</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          </nav>
+          <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-[#8A8985] gap-2">
+            <span>Aniket Singh · Software Engineer</span>
+            <a href={`mailto:${profile.email}`} className="text-white hover:underline">
+              {profile.email}
+            </a>
+          </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

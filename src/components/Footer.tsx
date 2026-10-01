@@ -1,66 +1,238 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import React, { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { portfolioData } from "@/data/portfolioData";
+import Magnetic from "./Magnetic";
 
-export default function Footer() {
-  const footerLinks = [
-    { label: "Home", href: "/" },
-    { label: "Services", href: "#services" },
-    { label: "Projects", href: "#projects" },
-    { label: "Technologies", href: "#technologies" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
-  ];
+gsap.registerPlugin(ScrollTrigger);
 
-  const handleFooterLinkClick = (e: React.MouseEvent, href: string) => {
-    if (href === "/" || href === "#home") {
-      e.preventDefault();
-      if (typeof window !== "undefined" && window.location.hash) {
-        window.history.replaceState(null, "", window.location.pathname);
+interface FooterProps {
+  onOpenContact: () => void;
+}
+
+function ArrowUpIcon({ className = "w-3 h-3" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+export default function Footer({ onOpenContact }: FooterProps) {
+  const { profile, socials } = portfolioData;
+  const footerRef = useRef<HTMLElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (ctaRef.current) {
+        gsap.from(ctaRef.current.children, {
+          scrollTrigger: {
+            trigger: ctaRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          y: 40,
+          opacity: 0,
+          stagger: 0.12,
+          duration: 0.9,
+          ease: "power3.out",
+        });
       }
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (bottomRef.current) {
+        gsap.from(bottomRef.current, {
+          scrollTrigger: {
+            trigger: bottomRef.current,
+            start: "top 95%",
+            toggleActions: "play none none none",
+          },
+          y: 60,
+          opacity: 0,
+          duration: 1.2,
+          ease: "power4.out",
+        });
+      }
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <footer className="w-full bg-[#f5f4ed] text-zinc-700 py-8 px-4 sm:px-8 border-t border-zinc-300/80">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-sm">
-        {/* Left Copyright */}
-        <div className="text-zinc-600 font-medium text-center md:text-left">
-          © 2026 <strong className="text-zinc-900 font-bold">Aniket Singh</strong>. All rights reserved.
-          <span className="hidden sm:inline text-zinc-400 ml-1.5">• Software Engineer @ TCS</span>
+    <footer
+      ref={footerRef}
+      id="contacts"
+      className="relative pt-24 pb-12 bg-[#0E0E0D] border-t border-white/10 overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-10">
+        {/* Main CTA Section */}
+        <div ref={ctaRef} className="mb-20 pb-16 border-b border-white/10">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="nav__cta-dot" />
+            <span className="font-mono text-xs uppercase tracking-wider text-emerald-400">
+              Available for full-time engineering & freelance projects
+            </span>
+          </div>
+
+          <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold text-[#F4F3EF] tracking-tight mb-6">
+            Have an ambitious project in mind?{" "}
+            <span className="font-serif italic font-normal text-white/70 block sm:inline">
+              Let&apos;s build together.
+            </span>
+          </h2>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-2">
+            <a
+              href={`mailto:${profile.email}`}
+              className="font-serif text-2xl sm:text-4xl text-[#F4F3EF] hover:text-white underline decoration-white/30 underline-offset-8 transition-colors"
+            >
+              {profile.email}
+            </a>
+
+            <Magnetic strength={0.3}>
+              <button
+                onClick={onOpenContact}
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#F4F3EF] text-black font-semibold text-sm sm:text-base hover:bg-white transition-all shadow-2xl cursor-pointer hover:shadow-white/20"
+              >
+                <span className="nav__cta-dot" />
+                <span>Start a Conversation →</span>
+              </button>
+            </Magnetic>
+          </div>
         </div>
 
-        {/* Center Navigation Links */}
-        <nav className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-          {footerLinks.map((item, idx) => (
-            <Link
-              key={idx}
-              href={item.href}
-              onClick={(e) => handleFooterLinkClick(e, item.href)}
-              className="text-zinc-600 hover:text-zinc-950 font-medium transition-colors cursor-pointer"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {/* Directory Links Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-20 text-xs sm:text-sm font-sans">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-mono text-xs font-bold text-emerald-400">
+                AS
+              </div>
+              <span className="font-bold text-base text-white tracking-tight">
+                {profile.firstName.toLowerCase()}
+              </span>
+            </div>
+            <p className="text-[#8A8985] max-w-sm leading-relaxed">
+              Software engineer &amp; full-stack developer.
+              <br />
+              Java, Python, MERN stack &amp; high-performance backend systems.
+            </p>
+          </div>
 
-        {/* Right GitHub & Motto */}
-        <div className="flex items-center gap-4 text-zinc-600 font-medium">
-          <a
-            href="https://github.com/sin-07"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-zinc-800 hover:text-zinc-950 font-bold transition-colors"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-            <span>GitHub</span>
-          </a>
-          <span>•</span>
-          <span>Build &amp; Grow</span>
+          <div className="lg:col-span-2 space-y-3">
+            <p className="font-mono text-xs uppercase tracking-wider text-[#5C5B57] mb-4">
+              Navigation
+            </p>
+            <div className="flex flex-col space-y-2 text-[#8A8985]">
+              <button
+                onClick={() => scrollToSection("projects")}
+                className="text-left hover:text-white transition-colors cursor-pointer"
+              >
+                Projects
+              </button>
+              <button
+                onClick={() => scrollToSection("about")}
+                className="text-left hover:text-white transition-colors cursor-pointer"
+              >
+                About & Skills
+              </button>
+              <button
+                onClick={() => scrollToSection("experience")}
+                className="text-left hover:text-white transition-colors cursor-pointer"
+              >
+                Experience
+              </button>
+              <button
+                onClick={() => scrollToSection("feed")}
+                className="text-left hover:text-white transition-colors cursor-pointer"
+              >
+                Feed
+              </button>
+            </div>
+          </div>
+
+          <div className="lg:col-span-2 space-y-3">
+            <p className="font-mono text-xs uppercase tracking-wider text-[#5C5B57] mb-4">
+              Socials
+            </p>
+            <div className="flex flex-col space-y-2 text-[#8A8985]">
+              {socials.map((item, idx) => (
+                <a
+                  key={idx}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="lg:col-span-3 space-y-3">
+            <p className="font-mono text-xs uppercase tracking-wider text-[#5C5B57] mb-4">
+              Contact
+            </p>
+            <div className="space-y-1 text-[#8A8985]">
+              <a href={`mailto:${profile.email}`} className="text-white hover:underline block">
+                {profile.email}
+              </a>
+              <p>+91 (947) 323 6395</p>
+              <p>Odisha / Bihar, India</p>
+              <p className="text-emerald-400 font-mono text-xs pt-1">
+                {profile.timezone}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar & Giant Watermark Name */}
+        <div
+          ref={bottomRef}
+          className="pt-10 border-t border-white/10 flex flex-col items-center justify-center text-center will-change-transform w-full"
+        >
+          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#5C5B57] mb-6 text-center sm:text-left">
+            <span>©2026 Aniket Singh</span>
+            <span className="hidden sm:inline">Tous droits réservés</span>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer py-1"
+            >
+              <span>Retour en haut</span>
+              <ArrowUpIcon className="w-3 h-3" />
+            </button>
+          </div>
+
+          <div className="w-full flex justify-between items-baseline select-none font-sans font-black text-[12vw] sm:text-[10vw] lg:text-[6.8rem] xl:text-[7.8rem] uppercase opacity-90 py-2 px-3 sm:px-6">
+            {profile.firstName
+              .toUpperCase()
+              .split("")
+              .map((char, idx) => (
+                <span
+                  key={idx}
+                  className={`inline-block ${
+                    idx === profile.firstName.length - 1 ? "pr-2 sm:pr-3" : ""
+                  }`}
+                >
+                  {char}
+                </span>
+              ))}
+          </div>
         </div>
       </div>
     </footer>
