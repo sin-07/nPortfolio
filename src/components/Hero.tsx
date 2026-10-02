@@ -134,18 +134,18 @@ export default function Hero({ onOpenResume }: HeroProps) {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-[96vh] flex flex-col justify-between pt-32 sm:pt-40 pb-12 overflow-hidden bg-[#0E0E0D]"
+      className="relative min-h-[96vh] flex flex-col justify-between pt-24 sm:pt-28 pb-8 overflow-hidden bg-[#0E0E0D]"
     >
       {/* Background Gradients & Dot Matrix */}
       <div className="absolute inset-0 pointer-events-none dot-matrix opacity-25 z-0" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-br from-white/6 to-transparent rounded-full blur-3xl pointer-events-none z-0" />
 
       {/* Main Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-10 w-full my-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-10 w-full pt-4 sm:pt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Giant Title Column */}
           <div className="lg:col-span-8 w-full">
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-xs font-mono text-emerald-400 mb-6 backdrop-blur-md shadow-[0_0_20px_rgba(34,197,94,0.18)]">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-xs font-mono text-emerald-400 mb-4 sm:mb-5 backdrop-blur-md shadow-[0_0_20px_rgba(34,197,94,0.18)]">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -155,7 +155,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
 
             <h1 className="select-none tracking-tight leading-[0.88] text-[#F4F3EF] w-full">
               {/* Row 1: Name */}
-              <span className="block overflow-hidden py-1.5 px-1.5 sm:px-3 w-full">
+              <span className="block overflow-hidden py-1 px-1.5 sm:px-3 w-full">
                 <span
                   ref={titleLine1Ref}
                   className="flex justify-between items-baseline w-full font-sans font-black text-[13vw] sm:text-[10.5vw] lg:text-[4.6rem] xl:text-[5.3rem] uppercase will-change-transform"
@@ -174,7 +174,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
               </span>
 
               {/* Row 2: Full-stack */}
-              <span className="block overflow-hidden py-1.5 px-1.5 sm:px-3 w-full">
+              <span className="block overflow-hidden py-1 px-1.5 sm:px-3 w-full">
                 <span
                   ref={titleLine2Ref}
                   className="flex justify-between items-baseline w-full font-serif italic font-normal text-[12.5vw] sm:text-[10vw] lg:text-[4.3rem] xl:text-[5rem] text-gray-300 will-change-transform"
@@ -191,7 +191,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
               </span>
 
               {/* Row 3: DEVELOPER */}
-              <span className="block overflow-hidden py-1.5 px-1.5 sm:px-3 w-full">
+              <span className="block overflow-hidden py-1 px-1.5 sm:px-3 w-full">
                 <span
                   ref={titleLine3Ref}
                   className="flex justify-between items-baseline w-full font-sans font-black text-[13vw] sm:text-[10.5vw] lg:text-[4.6rem] xl:text-[5.3rem] uppercase will-change-transform"
@@ -212,7 +212,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
           </div>
 
           {/* Right Info Column */}
-          <div className="lg:col-span-4 flex flex-col justify-between space-y-8 pb-3">
+          <div className="lg:col-span-4 flex flex-col justify-between space-y-6 lg:pt-2 pb-2">
             <div>
               <p
                 ref={bioRef}
@@ -303,7 +303,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
         {/* Social Links Row */}
         <div
           ref={socialsRowRef}
-          className="mt-16 sm:mt-20 flex flex-wrap items-center justify-start gap-3 sm:gap-4"
+          className="mt-8 sm:mt-10 flex flex-wrap items-center justify-start gap-3 sm:gap-4"
         >
           {socials.map((item, index) => (
             <Magnetic key={index} strength={0.25}>
@@ -325,7 +325,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
       </div>
 
       {/* Infinite Ticker Marquee */}
-      <div className="w-full overflow-hidden border-t border-b border-white/10 py-3 mt-14 bg-[#121211] select-none">
+      <div className="w-full overflow-hidden border-t border-b border-white/10 py-3 mt-8 sm:mt-10 bg-[#121211] select-none">
         <div ref={tickerRef} className="flex whitespace-nowrap will-change-transform">
           {[...Array(8)].map((_, i) => (
             <span
