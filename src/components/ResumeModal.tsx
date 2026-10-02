@@ -75,7 +75,7 @@ function LinkedInIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
 }
 
 export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
-  const { profile, education, experience } = portfolioData;
+  const { education, experience } = portfolioData;
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
