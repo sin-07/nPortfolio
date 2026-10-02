@@ -146,7 +146,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
         <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs uppercase tracking-wider bg-white/10 text-[#F4F3EF] px-3 py-1 rounded-full font-medium border border-white/10">
-              Curriculum Vitae
+              Professional Resume
             </span>
             <span className="text-xs text-emerald-400 font-mono">Verified Resume</span>
           </div>

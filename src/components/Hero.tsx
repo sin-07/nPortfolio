@@ -226,7 +226,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   Java · Python · MERN
                 </span>
                 <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-mono text-emerald-400">
-                  ITER &apos;25 · 7.46 CGPA
+                  ITER &apos;25 · B.Tech CSE
                 </span>
                 <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono text-[#C4C3BE]">
                   RESTful APIs

@@ -58,7 +58,7 @@ const STATIC_ACTIONS: ActionItem[] = [
     id: "nav-experience",
     category: "Navigation",
     title: "Experience & Academic Journey",
-    subtitle: "ITER B.Tech (7.46 CGPA) and Raven Tutorials",
+    subtitle: "ITER B.Tech CSE and Raven Tutorials",
     badge: "04",
   },
   {
@@ -71,7 +71,7 @@ const STATIC_ACTIONS: ActionItem[] = [
   {
     id: "action-resume",
     category: "Actions",
-    title: "Curriculum Vitae / Resume",
+    title: "Professional Resume",
     subtitle: "View verified credentials & download PDF document",
     badge: "PDF",
   },

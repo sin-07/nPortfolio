@@ -208,12 +208,12 @@ export default function Footer({ onOpenContact }: FooterProps) {
         >
           <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-[#5C5B57] mb-6 text-center sm:text-left">
             <span>©2026 Aniket Singh</span>
-            <span className="hidden sm:inline">Tous droits réservés</span>
+            <span className="hidden sm:inline">All rights reserved</span>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer py-1"
             >
-              <span>Retour en haut</span>
+              <span>Back to top</span>
               <ArrowUpIcon className="w-3 h-3" />
             </button>
           </div>

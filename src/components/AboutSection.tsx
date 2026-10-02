@@ -283,7 +283,7 @@ export default function AboutSection() {
               [✓] <strong className="text-white">Architecture &amp; OOPs:</strong> System Design, RESTful APIs, JWT Auth, Database Indexing
             </p>
             <p className="text-gray-400 pl-4">
-              [✓] <strong className="text-white">Academic Credential:</strong> B.Tech CSE @ ITER, Siksha &apos;O&apos; Anusandhan (7.46 CGPA)
+              [✓] <strong className="text-white">Academic Credential:</strong> B.Tech in Computer Science &amp; Engineering @ ITER, Siksha &apos;O&apos; Anusandhan
             </p>
             <p className="text-gray-400 pl-4">
               [✓] <strong className="text-white">Deployment Status:</strong> Live on Vercel · MongoDB Atlas Connected · Ready for Production

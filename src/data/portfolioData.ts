@@ -98,8 +98,7 @@ export const portfolioData = {
     also: "MongoDB & Cloudinary Integration  /  Database Optimization & Indexing  /  Ubuntu (Linux)  /  Visual Studio Code & Eclipse  /  Git & GitHub Version Control"
   },
   languages: [
-    { language: "English", level: "professional", flag: "🇺🇸" },
-    { language: "Hindi", level: "native", flag: "🇮🇳" }
+    { language: "English", level: "professional / fluent", flag: "🇺🇸" }
   ],
   projects: [
     {
@@ -178,8 +177,8 @@ export const portfolioData = {
       location: "Odisha, India",
       period: "2021 - 2025",
       status: "completed" as const,
-      description: "Bachelor of Technology with CGPA 7.46. Strong focus on OOPs, System Design, Data Structures, Algorithms, and Full-Stack MERN development.",
-      highlights: ["CGPA: 7.46", "OOPs & System Design", "Data Structures & Algorithms", "Full-Stack Development"]
+      description: "Bachelor of Technology in Computer Science & Engineering. Strong focus on OOPs, System Design, Data Structures, Algorithms, and Full-Stack MERN development.",
+      highlights: ["B.Tech CSE", "OOPs & System Design", "Data Structures & Algorithms", "Full-Stack Development"]
     },
     {
       degree: "12th (Senior Secondary)",
@@ -187,8 +186,8 @@ export const portfolioData = {
       location: "Nalanda, Bihar",
       period: "2020",
       status: "completed" as const,
-      description: "Completed Senior Secondary examination with 74.6% score with strong mathematical and analytical foundation.",
-      highlights: ["Percentage: 74.6%", "Mathematics & Science", "Academic Excellence"]
+      description: "Completed Senior Secondary examination with a strong mathematical, computing, and analytical foundation.",
+      highlights: ["Senior Secondary", "Mathematics & Science", "Academic Excellence"]
     },
     {
       degree: "10th (Secondary)",
@@ -196,8 +195,8 @@ export const portfolioData = {
       location: "Patna, Bihar",
       period: "2017",
       status: "completed" as const,
-      description: "Completed secondary education with high distinction (CGPA: 9.0).",
-      highlights: ["CGPA: 9.0", "Distinction in Science & Math", "Foundational Computing"]
+      description: "Completed secondary education with distinction in core sciences and foundational computing.",
+      highlights: ["Secondary School", "Distinction in Science & Math", "Foundational Computing"]
     }
   ],
   experience: [
@@ -222,7 +221,7 @@ export const portfolioData = {
       type: "certificate" as const,
       timeAgo: "2021 - 2025",
       title: "B.Tech Degree in Computer Science & Engineering — ITER, Siksha 'O' Anusandhan",
-      content: "Bachelor of Technology with CGPA 7.46. Strong academic and practical foundation in OOPs, System Design, Data Structures, Algorithms, and Full-Stack MERN development.",
+      content: "Bachelor of Technology in Computer Science & Engineering. Strong academic and practical foundation in OOPs, System Design, Data Structures, Algorithms, and Full-Stack MERN development.",
       badge: "iter.ac.in",
       sourceUrl: "https://github.com/sin-07",
       imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80"

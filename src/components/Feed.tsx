@@ -267,8 +267,8 @@ export default function Feed() {
                           <span>{likeInfo.count}</span>
                         </button>
                         <div className="flex items-center gap-4 text-[#8A8985] text-[11px] font-mono">
-                          <span>{item.comments || 16} réponses</span>
-                          <span className="hover:text-white">Partager</span>
+                          <span>{item.comments || 16} replies</span>
+                          <span className="hover:text-white">Share</span>
                         </div>
                       </div>
                     </div>

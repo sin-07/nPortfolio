@@ -147,11 +147,11 @@ export default function ArticlesModal({
           </div>
           <div>
             <div className="text-[10px] font-mono uppercase tracking-widest text-[#8A8985] mb-0.5">
-              (Index des écrits)
+              (Articles &amp; Research Index)
             </div>
             <h3 className="font-serif font-light text-xl sm:text-2xl text-[#F4F3EF]">
-              Articles Techniques &amp;{" "}
-              <span className="font-serif italic font-normal text-white/70">Recherches</span>
+              Technical Articles &amp;{" "}
+              <span className="font-serif italic font-normal text-white/70">Engineering Insights</span>
             </h3>
           </div>
         </div>
