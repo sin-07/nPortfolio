@@ -4,16 +4,24 @@ import React, { useState, useEffect } from "react";
 import Magnetic from "@/components/Magnetic";
 import { portfolioData } from "@/data/portfolioData";
 
+import { playClickSound, playPopSound } from "@/utils/audio";
+
 interface NavbarProps {
   onOpenArticles: () => void;
   onOpenResume?: () => void;
   onOpenContact: () => void;
+  onOpenCommandPalette?: () => void;
+  onToggleSound?: () => void;
+  isSoundActive?: boolean;
 }
 
 export default function Navbar({
   onOpenArticles,
   onOpenResume,
   onOpenContact,
+  onOpenCommandPalette,
+  onToggleSound,
+  isSoundActive = true,
 }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -98,7 +106,59 @@ export default function Navbar({
           </nav>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {onOpenCommandPalette && (
+              <button
+                onClick={() => {
+                  playClickSound();
+                  onOpenCommandPalette();
+                }}
+                className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 hover:border-white/25 text-[11px] font-mono text-[#8A8985] hover:text-white transition-all cursor-pointer"
+                title="Spotlight Search (Ctrl+K)"
+                aria-label="Open Command Palette"
+              >
+                <svg className="w-3 h-3 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fillRule="evenodd"
+                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>Ctrl K</span>
+              </button>
+            )}
+
+            {onToggleSound && (
+              <button
+                onClick={() => {
+                  playPopSound();
+                  onToggleSound();
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 hover:border-white/25 text-[11px] font-mono text-[#8A8985] hover:text-white transition-all cursor-pointer"
+                title={isSoundActive ? "Mute sound effects" : "Enable sound effects"}
+                aria-label="Toggle Sound"
+              >
+                <div className="flex items-end gap-0.5 h-3">
+                  <span
+                    className={`w-0.5 rounded-full transition-all duration-300 ${
+                      isSoundActive ? "h-3 bg-emerald-400 animate-pulse" : "h-1 bg-white/30"
+                    }`}
+                  />
+                  <span
+                    className={`w-0.5 rounded-full transition-all duration-300 ${
+                      isSoundActive ? "h-2 bg-emerald-400" : "h-1 bg-white/30"
+                    }`}
+                  />
+                  <span
+                    className={`w-0.5 rounded-full transition-all duration-300 ${
+                      isSoundActive ? "h-3 bg-emerald-400 animate-pulse" : "h-1 bg-white/30"
+                    }`}
+                  />
+                </div>
+                <span className="hidden sm:inline">{isSoundActive ? "SFX" : "Mute"}</span>
+              </button>
+            )}
+
             <Magnetic strength={0.25}>
               <button
                 onClick={onOpenContact}

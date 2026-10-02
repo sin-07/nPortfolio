@@ -13,8 +13,22 @@ interface ProjectCardProps {
   onOpenDetails: () => void;
 }
 
+function getProjectBadge(id: string) {
+  switch (id) {
+    case "tradexpert":
+      return { label: "Live Market API", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" };
+    case "rental-car":
+      return { label: "Fleet & JWT Auth", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" };
+    case "raven-tutorials":
+      return { label: "MERN Production", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" };
+    default:
+      return { label: "OOPs & System Design", color: "text-purple-400 bg-purple-500/10 border-purple-500/20" };
+  }
+}
+
 function ProjectCard({ project, index, onOpenDetails }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const badge = getProjectBadge(project.id);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -38,6 +52,11 @@ function ProjectCard({ project, index, onOpenDetails }: ProjectCardProps) {
             <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
             <span className="font-mono text-xs text-emerald-400 font-bold">
               0{index + 1}
+            </span>
+            <span
+              className={`ml-2 text-[10px] font-mono px-2 py-0.5 rounded-full border ${badge.color}`}
+            >
+              {badge.label}
             </span>
           </div>
           <div className="flex flex-wrap gap-1.5 justify-end">
@@ -131,10 +150,29 @@ function ProjectCard({ project, index, onOpenDetails }: ProjectCardProps) {
 export default function Projects() {
   const { projects } = portfolioData;
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  const filteredProjects = projects.filter((p) => {
+    if (selectedCategory === "All") return true;
+    if (selectedCategory === "Full-Stack MERN") {
+      return p.technologies.includes("React.js") && p.technologies.includes("MongoDB");
+    }
+    if (selectedCategory === "APIs & Systems") {
+      return (
+        p.technologies.includes("RESTful API") ||
+        p.technologies.includes("System Design") ||
+        p.technologies.includes("Java")
+      );
+    }
+    if (selectedCategory === "Financial Tech") {
+      return p.id === "tradexpert";
+    }
+    return true;
+  });
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -218,6 +256,23 @@ export default function Projects() {
                 ↘
               </span>
             </div>
+
+            {/* Filter Pills */}
+            <div className="flex flex-wrap gap-2 pt-4">
+              {["All", "Full-Stack MERN", "Financial Tech", "APIs & Systems"].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
+                    selectedCategory === cat
+                      ? "bg-[#F4F3EF] text-black font-semibold shadow-md"
+                      : "bg-white/5 text-[#8A8985] border border-white/10 hover:border-white/30 hover:text-white"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Cards Grid */}
@@ -225,7 +280,7 @@ export default function Projects() {
             ref={gridRef}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
           >
-            {projects.map((project, index) => (
+            {filteredProjects.map((project, index) => (
               <ProjectCard
                 key={project.id}
                 project={project}

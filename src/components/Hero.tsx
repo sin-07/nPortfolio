@@ -145,6 +145,14 @@ export default function Hero({ onOpenResume }: HeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
           {/* Giant Title Column */}
           <div className="lg:col-span-8 w-full">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-xs font-mono text-emerald-400 mb-6 backdrop-blur-md shadow-[0_0_20px_rgba(34,197,94,0.18)]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="font-medium tracking-wide">Available for Work · Full-Stack &amp; Systems</span>
+            </div>
+
             <h1 className="select-none tracking-tight leading-[0.88] text-[#F4F3EF] w-full">
               {/* Row 1: Name */}
               <span className="block overflow-hidden py-1.5 px-1.5 sm:px-3 w-full">
@@ -205,13 +213,26 @@ export default function Hero({ onOpenResume }: HeroProps) {
 
           {/* Right Info Column */}
           <div className="lg:col-span-4 flex flex-col justify-between space-y-8 pb-3">
-            <p
-              ref={bioRef}
-              className="text-[#8A8985] text-xs sm:text-sm font-sans leading-relaxed max-w-sm will-change-transform"
-            >
-              Aniket Singh is an innovative Software Engineer with hands-on experience in Java,
-              Python, and MERN stack development, building scalable high-performance backend systems and responsive UI.
-            </p>
+            <div>
+              <p
+                ref={bioRef}
+                className="text-[#8A8985] text-xs sm:text-sm font-sans leading-relaxed max-w-sm will-change-transform mb-3"
+              >
+                Aniket Singh is an innovative Software Engineer with hands-on experience in Java,
+                Python, and MERN stack development, building scalable high-performance backend systems and responsive UI.
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono text-[#C4C3BE]">
+                  Java · Python · MERN
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-mono text-emerald-400">
+                  ITER &apos;25 · 7.46 CGPA
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono text-[#C4C3BE]">
+                  RESTful APIs
+                </span>
+              </div>
+            </div>
 
             {/* Featured Index */}
             <div>

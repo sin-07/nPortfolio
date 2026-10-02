@@ -261,6 +261,36 @@ export default function AboutSection() {
           </TiltCard>
         </div>
 
+        {/* Interactive Architecture Terminal Widget */}
+        <div className="mb-14 rounded-3xl bg-[#121211] border border-white/10 p-6 sm:p-8 shadow-2xl overflow-hidden font-mono text-xs sm:text-sm">
+          <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/10 text-xs text-[#8A8985]">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
+              <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
+              <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
+              <span className="ml-2 text-gray-400">aniket@engineer: ~/architecture</span>
+            </div>
+            <span className="text-[11px] text-emerald-400 hidden sm:inline">zsh · system-active</span>
+          </div>
+          <div className="space-y-2 leading-relaxed text-[#C4C3BE]">
+            <p className="text-white">
+              <span className="text-emerald-400">$</span> aniket --inspect-stack --verbose
+            </p>
+            <p className="text-gray-400 pl-4">
+              [✓] <strong className="text-white">Full-Stack Core:</strong> Java SE · Python · MERN (MongoDB, Express, React, Node.js)
+            </p>
+            <p className="text-gray-400 pl-4">
+              [✓] <strong className="text-white">Architecture &amp; OOPs:</strong> System Design, RESTful APIs, JWT Auth, Database Indexing
+            </p>
+            <p className="text-gray-400 pl-4">
+              [✓] <strong className="text-white">Academic Credential:</strong> B.Tech CSE @ ITER, Siksha &apos;O&apos; Anusandhan (7.46 CGPA)
+            </p>
+            <p className="text-gray-400 pl-4">
+              [✓] <strong className="text-white">Deployment Status:</strong> Live on Vercel · MongoDB Atlas Connected · Ready for Production
+            </p>
+          </div>
+        </div>
+
         {/* Languages Row */}
         <div ref={languagesRef} className="flex flex-wrap items-center gap-4 justify-start">
           {languages.map((item, index) => (
