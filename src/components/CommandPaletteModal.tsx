@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 import { portfolioData } from "@/data/portfolioData";
 import { playClickSound, playPopSound } from "@/utils/audio";
+import { useBodyScrollLock } from "@/utils/scrollLock";
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -144,6 +145,8 @@ export default function CommandPaletteModal({
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useBodyScrollLock(isOpen);
 
   const handleClose = useCallback(() => {
     if (overlayRef.current && modalRef.current) {
@@ -324,7 +327,10 @@ export default function CommandPaletteModal({
         </div>
 
         {/* Results List */}
-        <div className="max-h-[380px] overflow-y-auto p-2.5 space-y-1">
+        <div
+          data-lenis-prevent
+          className="max-h-[380px] overflow-y-auto overscroll-contain p-2.5 space-y-1"
+        >
           {filtered.length === 0 ? (
             <div className="py-12 text-center text-xs font-mono text-[#8A8985]">
               No matching commands or projects found.

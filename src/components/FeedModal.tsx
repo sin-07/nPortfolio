@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 import { FeedItem } from "@/data/portfolioData";
+import { useBodyScrollLock } from "@/utils/scrollLock";
 
 interface FeedModalProps {
   item: FeedItem | null;
@@ -13,6 +14,8 @@ interface FeedModalProps {
 export default function FeedModal({ item, likes, onClose }: FeedModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  useBodyScrollLock(Boolean(item));
 
   useEffect(() => {
     if (item && overlayRef.current && modalRef.current) {
@@ -29,7 +32,7 @@ export default function FeedModal({ item, likes, onClose }: FeedModalProps) {
     }
   }, [item]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (overlayRef.current && modalRef.current) {
       gsap.to(modalRef.current, {
         scale: 0.9,
@@ -47,7 +50,18 @@ export default function FeedModal({ item, likes, onClose }: FeedModalProps) {
     } else {
       onClose();
     }
-  };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!item) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [item, handleClose]);
 
   if (!item) return null;
 
@@ -59,7 +73,8 @@ export default function FeedModal({ item, likes, onClose }: FeedModalProps) {
     >
       <div
         ref={modalRef}
-        className="bg-[#141413] text-[#F4F3EF] border border-white/15 rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto shadow-2xl relative"
+        data-lenis-prevent
+        className="bg-[#141413] text-[#F4F3EF] border border-white/15 rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto overscroll-contain shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button

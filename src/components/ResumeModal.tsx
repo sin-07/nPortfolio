@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { portfolioData } from "@/data/portfolioData";
+import { useBodyScrollLock } from "@/utils/scrollLock";
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -79,6 +80,8 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  useBodyScrollLock(isOpen);
+
   useEffect(() => {
     if (isOpen && overlayRef.current && modalRef.current) {
       gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" });
@@ -90,7 +93,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
     }
   }, [isOpen]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (overlayRef.current && modalRef.current) {
       gsap.to(modalRef.current, {
         scale: 0.9,
@@ -108,7 +111,18 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
     } else {
       onClose();
     }
-  };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, handleClose]);
 
   const handlePrint = () => {
     window.print();
@@ -124,7 +138,8 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
     >
       <div
         ref={modalRef}
-        className="bg-[#141413] text-[#F4F3EF] rounded-3xl max-w-3xl w-full p-6 sm:p-10 max-h-[92vh] overflow-y-auto shadow-2xl relative border border-white/15 will-change-transform"
+        data-lenis-prevent
+        className="bg-[#141413] text-[#F4F3EF] rounded-3xl max-w-3xl w-full p-6 sm:p-10 max-h-[92vh] overflow-y-auto overscroll-contain shadow-2xl relative border border-white/15 will-change-transform"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header */}

@@ -5,6 +5,7 @@ import Magnetic from "@/components/Magnetic";
 import { portfolioData } from "@/data/portfolioData";
 
 import { playClickSound, playPopSound } from "@/utils/audio";
+import { useBodyScrollLock } from "@/utils/scrollLock";
 
 interface NavbarProps {
   onOpenArticles: () => void;
@@ -26,6 +27,8 @@ export default function Navbar({
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { profile, socials } = portfolioData;
+
+  useBodyScrollLock(mobileMenuOpen);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -233,7 +236,10 @@ export default function Navbar({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#0E0E0D]/98 backdrop-blur-2xl flex flex-col justify-between px-8 pt-28 pb-12 transition-all">
+        <div
+          data-lenis-prevent
+          className="fixed inset-0 z-40 bg-[#0E0E0D]/98 backdrop-blur-2xl flex flex-col justify-between px-8 pt-28 pb-12 transition-all overscroll-contain"
+        >
           <p className="font-mono text-xs uppercase tracking-widest text-[#8A8985]">(Menu)</p>
           <nav className="flex flex-col space-y-6 my-auto text-3xl font-serif text-[#F4F3EF]">
             <button

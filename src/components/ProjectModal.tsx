@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 import Magnetic from "@/components/Magnetic";
 import { Project } from "@/data/portfolioData";
+import { useBodyScrollLock } from "@/utils/scrollLock";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -13,6 +14,8 @@ interface ProjectModalProps {
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  useBodyScrollLock(Boolean(project));
 
   useEffect(() => {
     if (project && overlayRef.current && modalRef.current) {
@@ -29,7 +32,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     }
   }, [project]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (overlayRef.current && modalRef.current) {
       gsap.to(modalRef.current, {
         scale: 0.9,
@@ -47,7 +50,18 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     } else {
       onClose();
     }
-  };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!project) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [project, handleClose]);
 
   if (!project) return null;
 
@@ -59,7 +73,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     >
       <div
         ref={modalRef}
-        className="bg-[#141413] text-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl relative"
+        data-lenis-prevent
+        className="bg-[#141413] text-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto overscroll-contain border border-white/20 shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import confetti from "canvas-confetti";
+import { useBodyScrollLock } from "@/utils/scrollLock";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -59,6 +60,8 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  useBodyScrollLock(isOpen);
+
   useEffect(() => {
     if (isOpen && overlayRef.current && modalRef.current) {
       gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" });
@@ -70,7 +73,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     }
   }, [isOpen]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (overlayRef.current && modalRef.current) {
       gsap.to(modalRef.current, {
         scale: 0.9,
@@ -98,7 +101,18 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
       setSubmitError(null);
       onClose();
     }
-  };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, handleClose]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,7 +169,8 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     >
       <div
         ref={modalRef}
-        className="bg-[#141413] text-[#F4F3EF] rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-white/20 shadow-2xl relative will-change-transform"
+        data-lenis-prevent
+        className="bg-[#141413] text-[#F4F3EF] rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-white/20 shadow-2xl relative max-h-[90vh] overflow-y-auto overscroll-contain will-change-transform"
         onClick={(e) => e.stopPropagation()}
       >
         <button
